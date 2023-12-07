@@ -68,14 +68,6 @@ const ProductDrawer = ({ children }: ProductDrawerProps) => {
         </div>
       </DrawerContent>
     </Drawer>
-    // <Drawer.Root>
-    //   <Drawer.Trigger>{children}</Drawer.Trigger>
-    //   <Drawer.Portal>
-    //     <Drawer.Content>
-    //     </Drawer.Content>
-    //     <Drawer.Overlay />
-    //   </Drawer.Portal>
-    // </Drawer.Root>
   )
 }
 
