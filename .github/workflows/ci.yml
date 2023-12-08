@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DATABASE_URL: "https://fake.com"
+  NEXTAUTH_SECRET: "fake"
+  NEXTAUTH_URL: "https://fake.com"
+  UPLOADTHING_SECRET: "fake"
+  UPLOADTHING_APP_ID: "fake"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Typecheck
+        run: pnpm run typecheck
