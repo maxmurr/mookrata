@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+enum TableStatus {
+  available
+  unavailable
+}
+
+enum OrderStatus {
+  pending
+  processing
+  completed
+  cancelled
+}
+
+model User {
+  id        BigInt      @id @default(autoincrement()) @map("user_id") @db.UnsignedBigInt
+  name      String      @unique @db.VarChar(32)
+  password  String      @db.VarChar(64)
+  createdAt DateTime    @default(now()) @map("created_at") @db.DateTime(6)
+  Table     Table[]
+  Category  Category[]
+  Product   Product[]
+  Promotion Promotion[]
+
+  @@map("users")
+}
+
+model Table {
+  id        BigInt      @id @default(autoincrement()) @map("table_id") @db.UnsignedBigInt
+  name      String      @unique @db.VarChar(32)
+  qrCode    String?     @map("qr_code") @db.VarChar(64)
+  status    TableStatus @default(available)
+  userId    BigInt?     @map("user_id") @db.UnsignedBigInt
+  user      User?       @relation(fields: [userId], references: [id])
+  createdAt DateTime    @default(now()) @map("created_at") @db.DateTime(6)
+  orders    Order[]
+
+  @@index([userId])
+  @@map("tables")
+}
+
+model Order {
+  id        BigInt      @id @default(autoincrement()) @map("order_id") @db.UnsignedBigInt
+  status    OrderStatus @default(pending)
+  tableId   BigInt      @map("table_id") @db.UnsignedBigInt
+  table     Table       @relation(fields: [tableId], references: [id])
+  createdAt DateTime    @default(now()) @map("created_at") @db.DateTime(6)
+  products  Product[]
+
+  @@index([tableId])
+  @@map("orders")
+}
+
+model Category {
+  id        BigInt    @id @default(autoincrement()) @map("category_id") @db.UnsignedBigInt
+  name      String    @unique @db.VarChar(32)
+  image     String    @db.VarChar(64)
+  userId    BigInt    @map("user_id") @db.UnsignedBigInt
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(6)
+  products  Product[]
+
+  @@index([userId])
+  @@map("categories")
+}
+
+model Product {
+  id          BigInt      @id @default(autoincrement()) @map("product_id") @db.UnsignedBigInt
+  name        String      @unique @db.VarChar(32)
+  description String      @db.VarChar(255)
+  image       String      @db.VarChar(64)
+  price       Float       @db.Float
+  categoryId  BigInt      @map("category_id") @db.UnsignedBigInt
+  category    Category    @relation(fields: [categoryId], references: [id])
+  userId      BigInt      @map("user_id") @db.UnsignedBigInt
+  user        User        @relation(fields: [userId], references: [id])
+  createdAt   DateTime    @default(now()) @map("created_at") @db.DateTime(6)
+  promotions  Promotion[]
+  orders      Order[]
+
+  @@index([categoryId])
+  @@index([userId])
+  @@map("products")
+}
+
+model Promotion {
+  id        BigInt    @id @default(autoincrement()) @map("promotion_id") @db.UnsignedBigInt
+  name      String    @unique @db.VarChar(32)
+  image     String    @db.VarChar(64)
+  userId    BigInt    @map("user_id") @db.UnsignedBigInt
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(6)
+  products  Product[]
+
+  @@index([userId])
+  @@map("promotions")
+}

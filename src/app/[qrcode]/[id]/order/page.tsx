@@ -1,14 +1,15 @@
 import React from 'react'
-import { Icons } from '../../../components/icons'
+import { Icons } from '../../../../components/icons'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '../../../components/ui/tabs'
-import MenuItem from '../../../components/menu-item'
-import { Button } from '../../../components/ui/button'
-import { ScrollArea } from '../../../components/ui/scroll-area'
+} from '../../../../components/ui/tabs'
+import MenuItem from '../../../../components/menu-item'
+import { Button } from '../../../../components/ui/button'
+import { ScrollArea } from '../../../../components/ui/scroll-area'
+import ProductDrawer from '../../../../components/drawer/product-drawer'
 
 const Order = () => {
   return (
@@ -36,7 +37,9 @@ const Order = () => {
           </TabsList>
           <TabsContent value='ordering' className='w-full'>
             <ScrollArea className='w-full max-h-[700px] overflow-y-auto'>
-              <MenuItem name='หมูสไลด์' />
+              <ProductDrawer>
+                <MenuItem name='หมูสไลด์' />
+              </ProductDrawer>
               <MenuItem name='หมูสไลด์' />
               <MenuItem name='หมูสไลด์' />
               <MenuItem name='หมูสไลด์' />

@@ -13,7 +13,10 @@ const MenuItem = ({ name, imageUrl }: MenuItemProps) => {
         <div className='flex py-[2px] px-[9px] justify-center items-center rounded-[4px] border border-gray-200'>
           2
         </div>
-        <p className='text-base text-gray-900'>{name}</p>
+        <div className='flex flex-col items-start gap-2'>
+          <p className='text-base text-gray-900'>{name}</p>
+          <p className='text-brand text-sm font-semibold'>แก้ไข</p>
+        </div>
       </div>
       <img
         src='/images/pork.png'

@@ -2,11 +2,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import { Icons } from '../../../components/icons'
-import MenuCard from '../../../components/menu-card'
-import CategoryCard from '../../../components/category-card'
-import ProductDrawer from '../../../components/drawer/product-drawer'
-import { Button } from '../../../components/ui/button'
+import { Icons } from '../../../../components/icons'
+import MenuCard from '../../../../components/menu-card'
+import CategoryCard from '../../../../components/category-card'
+import ProductDrawer from '../../../../components/drawer/product-drawer'
+import { Button } from '../../../../components/ui/button'
 
 type TablePageProps = {
   params: {
@@ -15,6 +15,7 @@ type TablePageProps = {
 }
 
 const TablePage = ({ params }: TablePageProps) => {
+  console.log(params)
   return (
     <main>
       <Image

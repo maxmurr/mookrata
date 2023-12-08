@@ -4,55 +4,78 @@ import { Button } from '../../../../components/ui/button'
 import Image from 'next/image'
 import QRCode from 'react-qr-code'
 import Link from 'next/link'
+import { getTableById } from '../../../../lib/actions/table'
+import EditTableDrawer from '../../../../components/drawer/edit-table-drawer'
+import { notFound } from 'next/navigation'
+import DeleteTableDrawer from '../../../../components/drawer/delete-table-drawer'
+import CreateQrButton from '../../../../components/create-qr-button'
 
-const TablePage = () => {
+type TablePageProps = {
+  params: {
+    id: string
+  }
+}
+
+const TablePage = async ({ params }: TablePageProps) => {
+  const table = await getTableById(Number(params.id))
+
+  if (!table?.id) {
+    return notFound()
+  }
+
   return (
-    <main>
+    <main className='h-screen'>
       <div className='flex h-16 p-2 items-center justify-between gap-2 shrink-0 border-b w-full'>
-        <div className='flex items-center'>
+        <Link href={'/dashboard/table'} className='flex items-center'>
           <div className='flex p-[10px] justify-center items-center '>
             <Icons.arrow_left className='w-5 h-5' />
           </div>
           <p className='text-gray-900 text-center text-xl font-semibold'>
-            โต๊ะ 1
+            {table.name}
           </p>
-        </div>
-        {/* <div className='flex gap-2'>
-          <Button variant={'outline'} size={'icon'}>
-            <Icons.pencil className='w-5 h-5' />
-          </Button>
-          <Button variant={'outline'} size={'icon'}>
-            <Icons.trash className='w-5 h-5 text-red-700' />
-          </Button>
-        </div> */}
-        <Link href='/dashboard/qrcode/1'>
-          <Button variant={'outline'} className='flex gap-2 items-center'>
-            <Icons.qrcode className='w-5 h-5' />
-            <p>ดู QR Code</p>
-          </Button>
         </Link>
-      </div>
-      {/* <section className='flex p-4 flex-col justify-center items-center gap-4 flex-1 h-full'>
-        <Image src='/images/table.png' alt='table' width={360} height={360} />
-        <div className='flex justify-center items-center'>
-          <div className='flex flex-col items-center gap-6 flex-1'>
-            <div className='flex flex-col items-center gap-4'>
-              <div className='flex max-w-[352px] flex-col items-center gap-1'>
-                <p className='text-base font-semibold text-gray-900'>
-                  ลูกค้ามาแล้ว?
-                </p>
-                <p className='text-sm text-gray-600'>
-                  สร้าง QR Code สำหรับสั่งอาหารเลย
-                </p>
-              </div>
-            </div>
-            <Button className='w-full flex gap-2'>
+        {table.qrCode ? (
+          <Link href='/dashboard/qrcode/1'>
+            <Button variant={'outline'} className='flex gap-2 items-center'>
               <Icons.qrcode className='w-5 h-5' />
-              <p>สร้าง QR Code สำหรับสั่งอาหาร</p>
+              <p>ดู QR Code</p>
             </Button>
+          </Link>
+        ) : (
+          <div className='flex gap-2'>
+            <EditTableDrawer tableId={Number(table.id)}>
+              <Button variant={'outline'} size={'icon'}>
+                <Icons.pencil className='w-5 h-5' />
+              </Button>
+            </EditTableDrawer>
+            <DeleteTableDrawer table={table}>
+              <Button variant={'outline'} size={'icon'}>
+                <Icons.trash className='w-5 h-5 text-red-700' />
+              </Button>
+            </DeleteTableDrawer>
           </div>
-        </div>
-      </section> */}
+        )}
+      </div>
+      {!table.qrCode && (
+        <section className='flex p-4 flex-col w-full justify-center items-center gap-4 flex-1 h-full'>
+          <Image src='/images/table.png' alt='table' width={360} height={360} />
+          <div className='flex justify-center items-center'>
+            <div className='flex flex-col items-center gap-6 flex-1'>
+              <div className='flex flex-col items-center gap-4'>
+                <div className='flex max-w-[352px] flex-col items-center gap-1'>
+                  <p className='text-base font-semibold text-gray-900'>
+                    ลูกค้ามาแล้ว?
+                  </p>
+                  <p className='text-sm text-gray-600'>
+                    สร้าง QR Code สำหรับสั่งอาหารเลย
+                  </p>
+                </div>
+              </div>
+              <CreateQrButton tableId={Number(table.id)} qrCode={`/table`}/>
+            </div>
+          </div>
+        </section>
+      )}
       {/* <section className='flex p-4 flex-col justify-start items-start gap-4 flex-1 h-full'>
         <div className='flex flex-col items-start gap-8 w-full pb-4 border-b'>
           <p className='text-lg text-gray-900 font-semibold'>รายการที่ 1</p>
@@ -73,9 +96,9 @@ const TablePage = () => {
           <Button className='w-full'>ชำระเงิน</Button>
         </div>
       </section> */}
-      <section className='flex p-4 flex-col justify-center items-center gap-4 flex-1 h-full'>
+      {/* <section className='flex p-4 m-auto flex-col justify-center items-center gap-4 flex-1 h-full'>
         <p className='text-base font-medium text-gray-500'>ยังไม่มีรายการ</p>
-      </section>
+      </section> */}
     </main>
   )
 }

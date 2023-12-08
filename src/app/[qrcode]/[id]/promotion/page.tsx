@@ -1,15 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react'
-import { Icons } from '../../../components/icons'
-import MenuCard from '../../../components/menu-card'
+import { Icons } from '../../../../components/icons'
+import MenuCard from '../../../../components/menu-card'
 
-type ProductPageProps = {
-  params: {
-    id: string
-  }
-}
-
-const ProductPage = ({ params }: ProductPageProps) => {
+const PromotionPage = () => {
   return (
     <main>
       <div className='flex h-16 p-2 items-center gap-2 shrink-0 border-b'>
@@ -31,4 +24,4 @@ const ProductPage = ({ params }: ProductPageProps) => {
   )
 }
 
-export default ProductPage
+export default PromotionPage
