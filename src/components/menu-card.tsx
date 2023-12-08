@@ -8,7 +8,7 @@ type MenuCardProps = {
   name: string
   price: number
   imageUrl?: string | null
-  productId?: number
+  id?: number
   classNames?: string
   width?: number
 }
@@ -17,7 +17,7 @@ const MenuCard = ({
   name,
   price,
   imageUrl,
-  productId,
+  id,
   classNames,
   width,
 }: MenuCardProps) => {
@@ -37,7 +37,7 @@ const MenuCard = ({
       />
       <p className='text-gray-900 text-sm'>{name}</p>
       <p className='text-gray-900 text-sm font-semibold'>{price} บาท</p>
-      {productId && <p className='text-brand text-sm font-semibold'>แก้ไข</p>}
+      {id && <p className='text-brand text-sm font-semibold'>แก้ไข</p>}
     </div>
   )
 }

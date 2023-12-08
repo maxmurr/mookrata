@@ -20,30 +20,35 @@ import toast from 'react-hot-toast'
 import { useUploadThing } from '../../lib/uploadthing'
 import { createPromotion } from '../../lib/actions/promotion'
 import { useRouter } from 'next/navigation'
+import { Promotion } from '@prisma/client'
 
-const createPromotionSchema = z.object({
+const editPromotionSchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อโปรโมชั่น'),
-  price: z
-    .string()
-    .nonempty('กรุณากรอกราคาสินค้า')
-    .refine(value => {
-      const parsed = Number(value)
-      return !isNaN(parsed)
-    }, 'กรุณากรอกราคาสินค้า'),
+  price: z.number().refine(value => {
+    const parsed = Number(value)
+    return !isNaN(parsed)
+  }, 'กรุณากรอกราคาสินค้า'),
   description: z.string().optional(),
   image: z.string().optional(),
 })
 
-type CreatePromotionInput = z.infer<typeof createPromotionSchema>
+type EditPromotionInput = z.infer<typeof editPromotionSchema>
 
-const CreatePromotionForm = () => {
+type EditPromotionFormProps = {
+  promotion: Promotion
+}
+
+const EditPromotionForm = ({ promotion }: EditPromotionFormProps) => {
   const router = useRouter()
   const [files, setFiles] = useState<File[]>([])
 
-  const form = useForm<CreatePromotionInput>({
-    resolver: zodResolver(createPromotionSchema),
+  const form = useForm<EditPromotionInput>({
+    resolver: zodResolver(editPromotionSchema),
     defaultValues: {
-      name: '',
+      name: promotion.name ?? '',
+      price: promotion.price ?? undefined,
+      description: promotion.description ?? undefined,
+      image: promotion.image ?? undefined,
     },
   })
 
@@ -57,7 +62,7 @@ const CreatePromotionForm = () => {
     },
   })
 
-  const onSubmit = async (data: CreatePromotionInput) => {
+  const onSubmit = async (data: EditPromotionInput) => {
     if (!!files.length) {
       console.log(files)
       await startUpload(files).then(res => {
@@ -74,12 +79,12 @@ const CreatePromotionForm = () => {
       data.image
     )
       .then(() => {
-        toast.success('เพิ่มโปรโมชั่นเรียบร้อยแล้ว')
+        toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
         router.push('/dashboard/promotion')
         router.refresh()
       })
       .then(() => {
-        toast.error('เพิ่มโปรโมชั่นไม่สำเร็จ')
+        toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
       })
   }
 
@@ -176,8 +181,17 @@ const CreatePromotionForm = () => {
           </FormControl>
         </FormItem>
         <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
-          <Button className='w-full' disabled={isUploading}>
-            เพิ่ม
+          {/* <DeleteProductDrawer product={product} categoryId={categoryId}> */}
+          <Button
+            className='w-full text-red-700'
+            variant={'outline'}
+            type='button'
+          >
+            ลบ
+          </Button>
+          {/* </DeleteProductDrawer> */}
+          <Button className='w-full' disabled={isUploading} type='submit'>
+            บันทึก
           </Button>
         </div>
       </form>
@@ -185,4 +199,4 @@ const CreatePromotionForm = () => {
   )
 }
 
-export default CreatePromotionForm
+export default EditPromotionForm

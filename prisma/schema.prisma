@@ -42,12 +42,15 @@ model Table {
 }
 
 model Order {
-  id        Int         @id @default(autoincrement()) @map("order_id")
-  status    OrderStatus @default(pending)
-  tableId   Int         @map("table_id")
-  table     Table       @relation(fields: [tableId], references: [id])
-  createdAt DateTime    @default(now()) @map("created_at") @db.DateTime(6)
-  products  Product[]
+  id              Int            @id @default(autoincrement()) @map("order_id")
+  status          OrderStatus    @default(pending)
+  tableId         Int            @map("table_id")
+  table           Table          @relation(fields: [tableId], references: [id])
+  createdAt       DateTime       @default(now()) @map("created_at") @db.DateTime(6)
+  productCartId   Int?           @unique @map("product_cart_id")
+  productCart     ProductCart?   @relation(fields: [productCartId], references: [id])
+  promotionCartId Int?           @unique @map("promotion_cart_id")
+  promotionCart   PromotionCart? @relation(fields: [promotionCartId], references: [id])
 
   @@index([tableId])
   @@map("orders")
@@ -67,36 +70,112 @@ model Category {
 }
 
 model Product {
-  id          Int         @id @default(autoincrement()) @map("product_id")
-  name        String      @unique @db.VarChar(32)
-  description String?     @db.VarChar(255)
-  image       String?     @db.VarChar(64)
-  price       Float       @default(0) @db.Float
-  quantity    Int         @default(0) @db.Int
-  categoryId  Int         @map("category_id")
-  category    Category    @relation(fields: [categoryId], references: [id])
-  userId      Int         @map("user_id")
-  user        User        @relation(fields: [userId], references: [id])
-  createdAt   DateTime    @default(now()) @map("created_at") @db.DateTime(6)
-  promotions  Promotion[]
-  orders      Order[]
+  id           Int           @id @default(autoincrement()) @map("product_id")
+  name         String        @unique @db.VarChar(32)
+  description  String?       @db.VarChar(255)
+  image        String?       @db.VarChar(64)
+  price        Float         @default(0) @db.Float
+  categoryId   Int           @map("category_id")
+  category     Category      @relation(fields: [categoryId], references: [id])
+  userId       Int           @map("user_id")
+  user         User          @relation(fields: [userId], references: [id])
+  createdAt    DateTime      @default(now()) @map("created_at") @db.DateTime(6)
+  productCarts ProductCart[]
+  promotions   Promotion[]
 
   @@index([categoryId])
   @@index([userId])
   @@map("products")
 }
 
+model ProductCart {
+  id        Int        @id @default(autoincrement()) @map("product_cart_id")
+  order     Order?
+  promotion Promotion?
+  createdAt DateTime   @default(now()) @map("created_at") @db.DateTime(6)
+  products  Product[]
+
+  @@map("product_carts")
+}
+
+// model ProductCart {
+//   id               Int               @id @default(autoincrement()) @map("product_cart_id")
+//   orderId          Int               @unique @map("order_id")
+//   order            Order             @relation(fields: [orderId], references: [id])
+//   promotionId      Int               @unique @map("promotion_id")
+//   promotion        Promotion         @relation(fields: [promotionId], references: [id])
+//   createdAt        DateTime          @default(now()) @map("created_at") @db.DateTime(6)
+//   productCartItems ProductCartItem[]
+
+//   @@index([orderId])
+//   @@index([promotionId])
+//   @@map("product_carts")
+// }
+
+// model ProductCartItem {
+//   id            Int         @id @default(autoincrement()) @map("product_cart_item_id")
+//   productCartId Int         @map("product_cart_id")
+//   productCart   ProductCart @relation(fields: [productCartId], references: [id])
+//   productId     Int         @map("product_id")
+//   product       Product     @relation(fields: [productId], references: [id])
+//   quantity      Int         @default(1) @db.Int
+//   createdAt     DateTime    @default(now()) @map("created_at") @db.DateTime(6)
+
+//   @@index([productCartId])
+//   @@index([productId])
+// }
+
 model Promotion {
-  id          Int       @id @default(autoincrement()) @map("promotion_id")
-  name        String    @unique @db.VarChar(32)
-  price       Float     @default(0) @db.Float
-  description String?   @db.VarChar(255)
-  image       String?   @db.VarChar(64)
-  userId      Int       @map("user_id")
-  user        User      @relation(fields: [userId], references: [id])
-  createdAt   DateTime  @default(now()) @map("created_at") @db.DateTime(6)
-  products    Product[]
+  id            Int             @id @default(autoincrement()) @map("promotion_id")
+  name          String          @unique @db.VarChar(32)
+  price         Float           @default(0) @db.Float
+  description   String?         @db.VarChar(255)
+  image         String?         @db.VarChar(64)
+  userId        Int             @map("user_id")
+  user          User            @relation(fields: [userId], references: [id])
+  productId     Int?            @map("product_id")
+  product       Product?        @relation(fields: [productId], references: [id])
+  createdAt     DateTime        @default(now()) @map("created_at") @db.DateTime(6)
+  // productCart        ProductCart?
+  // promotionCartItems PromotionCartItem[]
+  productCartId Int?            @unique @map("product_cart_id")
+  productCart   ProductCart?    @relation(fields: [productCartId], references: [id])
+  promotionCart PromotionCart[]
 
   @@index([userId])
+  @@index([productId])
   @@map("promotions")
 }
+
+model PromotionCart {
+  id         Int         @id @default(autoincrement()) @map("promotion_cart_id")
+  order      Order?
+  createdAt  DateTime    @default(now()) @map("created_at") @db.DateTime(6)
+  promotions Promotion[]
+
+  @@map("promotion_carts")
+}
+
+// model PromotionCart {
+//   id                 Int                 @id @default(autoincrement()) @map("promotion_cart_id")
+//   orderId            Int                 @unique @map("order_id")
+//   order              Order               @relation(fields: [orderId], references: [id])
+//   createdAt          DateTime            @default(now()) @map("created_at") @db.DateTime(6)
+//   promotionCartItems PromotionCartItem[]
+
+//   @@index([orderId])
+//   @@map("promotion_carts")
+// }
+
+// model PromotionCartItem {
+//   id              Int           @id @default(autoincrement()) @map("promotion_cart_item_id")
+//   promotionCartId Int           @map("promotion_cart_id")
+//   promotionCart   PromotionCart @relation(fields: [promotionCartId], references: [id])
+//   promotionId     Int           @map("promotion_id")
+//   promotion       Promotion     @relation(fields: [promotionId], references: [id])
+//   quantity        Int           @default(1) @db.Int
+//   createdAt       DateTime      @default(now()) @map("created_at") @db.DateTime(6)
+
+//   @@index([promotionCartId])
+//   @@index([promotionId])
+// }

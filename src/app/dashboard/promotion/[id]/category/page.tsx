@@ -3,6 +3,8 @@ import { getServerAuthSession } from '../../../../../server/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Icons } from '../../../../../components/icons'
+import CategoryCard from '../../../../../components/category-card'
+import { getCategories } from '../../../../../lib/actions/category'
 
 type CategoryPageProps = {
   params: {
@@ -16,6 +18,8 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
   if (!session) {
     redirect('/dashboard/sign-in')
   }
+
+  const categories = await getCategories()
 
   return (
     <main>
@@ -32,7 +36,19 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
           </p>
         </Link>
       </div>
-      <section className='flex p-4 flex-col justify-center items-start gap-4 flex-1 h-full'></section>
+      <section className='flex p-4 flex-col justify-center items-start gap-4 flex-1 h-full'>
+        <p className='text-gray-900 font-semibold text-lg'>หมวดหมู่</p>
+        <div className='grid grid-cols-2 w-full gap-4'>
+          {categories.map(category => (
+            <Link
+              key={category.id}
+              href={`/dashboard/promotion/${params.id}/category/${category.id}`}
+            >
+              <CategoryCard name={category.name} imageUrl={category.image} />
+            </Link>
+          ))}
+        </div>
+      </section>
     </main>
   )
 }

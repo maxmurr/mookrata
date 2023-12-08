@@ -70,7 +70,7 @@ const EditCategoryPage = async ({ params }: EditCategoryPageProps) => {
                 name={product.name}
                 price={product.price}
                 imageUrl={product.image}
-                productId={product.id}
+                id={product.id}
                 width={173}
               />
             </EditProductDrawer>

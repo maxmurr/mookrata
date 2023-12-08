@@ -5,6 +5,8 @@ import { Button } from '../../../components/ui/button'
 import { Icons } from '../../../components/icons'
 import { redirect } from 'next/navigation'
 import { getServerAuthSession } from '../../../server/auth'
+import { getPromotions } from '../../../lib/actions/promotion'
+import MenuCard from '../../../components/menu-card'
 
 const PromotionPage = async () => {
   const session = await getServerAuthSession()
@@ -12,6 +14,8 @@ const PromotionPage = async () => {
   if (!session) {
     redirect('/dashboard/sign-in')
   }
+
+  const promotions = await getPromotions()
 
   return (
     <main>
@@ -50,6 +54,22 @@ const PromotionPage = async () => {
             </Button>
           </Link>
         </div>
+      </section>
+      <section className='grid grid-cols-2 items-start gap-4 w-full p-4'>
+        {promotions.map(promotion => (
+          <Link
+            href={`/dashboard/promotion/${promotion.id}`}
+            key={promotion.id}
+          >
+            <MenuCard
+              name={promotion.name}
+              price={promotion.price}
+              imageUrl={promotion.image}
+              id={promotion.id}
+              width={173}
+            />
+          </Link>
+        ))}
       </section>
     </main>
   )
