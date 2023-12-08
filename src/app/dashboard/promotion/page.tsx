@@ -1,8 +1,18 @@
 import React from 'react'
 import Link from 'next/link'
 import Header from '../../../components/header'
+import { Button } from '../../../components/ui/button'
+import { Icons } from '../../../components/icons'
+import { redirect } from 'next/navigation'
+import { getServerAuthSession } from '../../../server/auth'
 
-const PromotionPage = () => {
+const PromotionPage = async () => {
+  const session = await getServerAuthSession()
+
+  if (!session) {
+    redirect('/dashboard/sign-in')
+  }
+
   return (
     <main>
       <div className='flex py-0 px-4 flex-col items-start gap-2 border-b'>
@@ -30,7 +40,17 @@ const PromotionPage = () => {
           </Link>
         </div>
       </div>
-      <section className='flex p-4 flex-col items-start gap-4 flex-1'></section>
+      <section className='flex p-4 flex-col items-start gap-4 flex-1'>
+        <div className='flex items-start justify-between w-full'>
+          <p className='text-lg font-semibold'>รายการโปรโมชันทั้งหมด</p>
+          <Link href={'/dashboard/promotion/create'}>
+            <Button className='text-white py-[10px] px-[14px] gap-2 items-center flex justify-center'>
+              <Icons.plus className='text-white fill-white w-5 h-5' />
+              <p>เพิ่มรายการ</p>
+            </Button>
+          </Link>
+        </div>
+      </section>
     </main>
   )
 }

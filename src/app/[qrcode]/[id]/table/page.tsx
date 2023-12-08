@@ -7,15 +7,26 @@ import MenuCard from '../../../../components/menu-card'
 import CategoryCard from '../../../../components/category-card'
 import ProductDrawer from '../../../../components/drawer/product-drawer'
 import { Button } from '../../../../components/ui/button'
+import { isValideQrCode } from '../../../../lib/actions/qrcode'
+import { notFound } from 'next/navigation'
+import { getCategories } from '../../../../lib/actions/category'
 
 type TablePageProps = {
   params: {
+    qrcode: string
     id: string
   }
 }
 
-const TablePage = ({ params }: TablePageProps) => {
-  console.log(params)
+const TablePage = async ({ params }: TablePageProps) => {
+  const isValidQrCode = await isValideQrCode(Number(params.id), params.qrcode)
+
+  if (!isValidQrCode) {
+    return notFound()
+  }
+
+  const categories = await getCategories()
+
   return (
     <main>
       <Image
@@ -62,9 +73,13 @@ const TablePage = ({ params }: TablePageProps) => {
           <p className='text-lg font-semibold text-gray-900'>หมวดหมู่</p>
         </div>
         <div className='grid grid-cols-2 items-start gap-4 w-full'>
-          <CategoryCard name='เนื้อหมู' />
-          <CategoryCard name='เนื้อหมู' />
-          <CategoryCard name='เนื้อหมู' />
+          {categories.map(category => (
+            <CategoryCard
+              name={category.name}
+              imageUrl={category.image}
+              key={category.id}
+            />
+          ))}
         </div>
       </section>
       <div className='flex w-full p-4 items-center gap-4 border-t mt-4 absolute bottom-0'>

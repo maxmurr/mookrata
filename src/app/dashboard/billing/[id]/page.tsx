@@ -3,8 +3,16 @@ import { Icons } from '../../../../components/icons'
 import QRCode from 'react-qr-code'
 import Image from 'next/image'
 import { Button } from '../../../../components/ui/button'
+import { getServerAuthSession } from '../../../../server/auth'
+import { redirect } from 'next/navigation'
 
-const BillingPage = () => {
+const BillingPage = async () => {
+  const session = await getServerAuthSession()
+
+  if (!session) {
+    redirect('/dashboard/sign-in')
+  }
+
   return (
     <main>
       <div className='flex h-16 p-2 items-center justify-between gap-2 shrink-0 border-b w-full'>
@@ -39,7 +47,7 @@ const BillingPage = () => {
           <p className='text-gray-900'>นาย แม็กทอมมัส เมอร์เรย์</p>
         </div>
       </section>
-      <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 absolute bottom-0 right-0'>
+      <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
         <Button className='w-full'>ยืนยันการชำระเงิน</Button>
       </div>
     </main>

@@ -1,8 +1,22 @@
 import React from 'react'
 import { Icons } from '../../../../components/icons'
 import MenuCard from '../../../../components/menu-card'
+import { isValideQrCode } from '../../../../lib/actions/qrcode'
+import { notFound } from 'next/navigation'
 
-const PromotionPage = () => {
+type PromotionPageProps = {
+  params: {
+    qrcode: string
+    id: string
+  }
+}
+
+const PromotionPage = async ({ params }: PromotionPageProps) => {
+  const isValidQrCode = await isValideQrCode(Number(params.id), params.qrcode)
+
+  if (!isValidQrCode) {
+    return notFound()
+  }
   return (
     <main>
       <div className='flex h-16 p-2 items-center gap-2 shrink-0 border-b'>

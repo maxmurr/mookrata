@@ -15,10 +15,10 @@ const TableCard = ({ table }: TableCardProps) => {
       <p className='text-xl text-black font-semibold'>{table.name}</p>
       <p
         className={`${
-          table.status === 'available' ? 'text-green-700' : 'text-red-700'
+          !table.qrCode ? 'text-green-700' : 'text-red-700'
         } text-base`}
       >
-        {table.status === 'available' ? 'ว่าง' : 'ไม่ว่าง'}
+        {!table.qrCode ? 'ว่าง' : 'ไม่ว่าง'}
       </p>
     </Link>
   )

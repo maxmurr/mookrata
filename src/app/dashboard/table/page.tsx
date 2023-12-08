@@ -7,8 +7,16 @@ import Header from '../../../components/header'
 import { getTables } from '../../../lib/actions/table'
 import TableCard from '../../../components/table-card'
 import TableDrawer from '../../../components/drawer/create-table-drawer'
+import { getServerAuthSession } from '../../../server/auth'
+import { redirect } from 'next/navigation'
 
 const TablePage = async () => {
+  const session = await getServerAuthSession()
+
+  if (!session) {
+    redirect('/dashboard/sign-in')
+  }
+
   const tables = await getTables()
   return (
     <main>
@@ -52,10 +60,7 @@ const TablePage = async () => {
         {tables.length > 0 ? (
           <div className='grid grid-cols-2 w-full gap-4'>
             {tables.map(table => (
-              <TableCard
-                key={table.id}
-                table={table}
-              />
+              <TableCard key={table.id} table={table} />
             ))}
           </div>
         ) : (

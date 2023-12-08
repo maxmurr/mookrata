@@ -1,5 +1,12 @@
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
+import { getServerAuthSession } from '../server/auth'
 
-export default function Home() {
-  return notFound()
+export default async function Home() {
+  const session = await getServerAuthSession()
+
+  if (session) {
+    return redirect('/dashboard/table')
+  }
+
+  return redirect('/dashboard/sign-in')
 }

@@ -2,8 +2,16 @@ import Link from 'next/link'
 import React from 'react'
 import { Avatar, AvatarFallback } from '../../../components/ui/avatar'
 import Image from 'next/image'
+import { redirect } from 'next/navigation'
+import { getServerAuthSession } from '../../../server/auth'
 
-const TransactionPage = () => {
+const TransactionPage = async () => {
+  const session = await getServerAuthSession()
+
+  if (!session) {
+    redirect('/dashboard/sign-in')
+  }
+
   return (
     <main>
       <div className='flex py-0 px-4 flex-col items-start gap-2 border-b'>
@@ -15,7 +23,7 @@ const TransactionPage = () => {
             </p>
           </div>
           <Avatar>
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>GM</AvatarFallback>
           </Avatar>
         </div>
         <div className='flex items-start gap-3'>

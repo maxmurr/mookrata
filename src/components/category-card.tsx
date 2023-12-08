@@ -3,7 +3,7 @@ import React from 'react'
 
 type CategoryCardProps = {
   name: string
-  imageUrl?: string
+  imageUrl: string | null
 }
 
 const CategoryCard = ({ name, imageUrl }: CategoryCardProps) => {
@@ -11,7 +11,7 @@ const CategoryCard = ({ name, imageUrl }: CategoryCardProps) => {
     <div className='flex p-3 justify-between items-start flex-1 rounded-lg bg-gray-50 w-full'>
       <p className='text-gray-900 text-sm font-medium'>{name}</p>
       <img
-        src='/images/pork.png'
+        src={imageUrl ? imageUrl : '/images/pork.png'}
         alt='pork'
         className='h-20 w-20 rounded-lg object-cover'
       />

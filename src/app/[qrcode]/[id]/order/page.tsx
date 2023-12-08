@@ -6,12 +6,27 @@ import {
   TabsList,
   TabsTrigger,
 } from '../../../../components/ui/tabs'
-import MenuItem from '../../../../components/menu-item'
+import MenuItem from '../../../../components/order-item'
 import { Button } from '../../../../components/ui/button'
 import { ScrollArea } from '../../../../components/ui/scroll-area'
 import ProductDrawer from '../../../../components/drawer/product-drawer'
+import { isValideQrCode } from '../../../../lib/actions/qrcode'
+import { notFound } from 'next/navigation'
+import OrderItem from '../../../../components/order-item'
 
-const Order = () => {
+type OrderPageProps = {
+  params: {
+    qrcode: string
+    id: string
+  }
+}
+
+const OrderPage = async ({ params }: OrderPageProps) => {
+  const isValidQrCode = await isValideQrCode(Number(params.id), params.qrcode)
+
+  if (!isValidQrCode) {
+    return notFound()
+  }
   return (
     <main>
       <div className='flex h-16 p-2 items-center gap-2 shrink-0 border-b'>
@@ -38,32 +53,23 @@ const Order = () => {
           <TabsContent value='ordering' className='w-full'>
             <ScrollArea className='w-full max-h-[700px] overflow-y-auto'>
               <ProductDrawer>
-                <MenuItem name='หมูสไลด์' />
+                <OrderItem name='หมูสไลด์' />
               </ProductDrawer>
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
+              <OrderItem name='หมูสไลด์' />
+              <OrderItem name='หมูสไลด์' />
             </ScrollArea>
-            <div className='flex w-full p-4 items-center gap-4 border-t mt-4 absolute bottom-0 right-0'>
+            <div className='flex w-full p-4 items-center gap-4 border-t mt-4 fixed bottom-0 right-0'>
               <Button className='w-full'>สั่งอาหารเลย!</Button>
             </div>
           </TabsContent>
           <TabsContent value='ordered' className='w-full'>
             <ScrollArea className='w-full max-h-80 overflow-y-auto'>
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
-              <MenuItem name='หมูสไลด์' />
+              <OrderItem name='หมูสไลด์' />
+              <OrderItem name='หมูสไลด์' />
+              <OrderItem name='หมูสไลด์' />
+              <OrderItem name='หมูสไลด์' />
             </ScrollArea>
-            <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 absolute bottom-0 right-0'>
+            <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
               <p className='text-lg font-semibold text-gray-900'>รวมทั้งหมด</p>
               <p className='text-ls font-semibold text-gray-900'>1,500 บาท</p>
             </div>
@@ -74,4 +80,4 @@ const Order = () => {
   )
 }
 
-export default Order
+export default OrderPage

@@ -14,6 +14,7 @@ type CreateQrButtonProps = {
 
 const CreateQrButton = ({ tableId, qrCode }: CreateQrButtonProps) => {
   const router = useRouter()
+
   return (
     <Button
       className='w-full flex gap-2'
@@ -26,6 +27,7 @@ const CreateQrButton = ({ tableId, qrCode }: CreateQrButtonProps) => {
             })
             document.dispatchEvent(escEvent)
             router.push(`/dashboard/qrcode/${tableId}`)
+            router.refresh()
           })
           .catch(() => {
             toast.error('สร้าง QR Code ไม่สำเร็จ')

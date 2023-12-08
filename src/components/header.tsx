@@ -19,7 +19,13 @@ const Header = () => {
   return (
     <header className='flex w-full justify-between'>
       <div className='flex items-center gap-2'>
-        <Image src='/images/logo.png' alt='logo' width={40} height={40} />
+        <Image
+          src='/images/logo.png'
+          alt='logo'
+          width={40}
+          height={40}
+          priority
+        />
         <p className='text-lg font-semibold text-gray-900'>
           Glamorous Mookrata
         </p>

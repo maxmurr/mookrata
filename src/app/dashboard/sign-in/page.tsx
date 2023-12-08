@@ -12,14 +12,20 @@ export const metadata: Metadata = {
 
 const SignInPage = async () => {
   const session = await getServerAuthSession()
-  console.log(session)
+
   if (session) {
     redirect('/dashboard/table')
   }
 
   return (
     <main className='container mx-auto py-8 px-4 flex flex-col items-center gap-4 flex-1'>
-      <Image src='/images/logo.png' alt='logo' width={120} height={120} />
+      <Image
+        src='/images/logo.png'
+        alt='logo'
+        width={120}
+        height={120}
+        priority
+      />
       <p className='text-2xl font-semibold text-gray-900'>เข้าสู่ระบบ</p>
       <SigninForm />
     </main>

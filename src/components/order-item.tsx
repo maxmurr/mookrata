@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
 
-type MenuItemProps = {
+type OrderItemProps = {
   name: string
-  imageUrl?: string
+  imageUrl?: string | null
 }
 
-const MenuItem = ({ name, imageUrl }: MenuItemProps) => {
+const OrderItem = ({ name, imageUrl }: OrderItemProps) => {
   return (
     <div className='flex h-20 justify-between items-start w-full'>
       <div className='flex items-start gap-4'>
@@ -19,7 +19,7 @@ const MenuItem = ({ name, imageUrl }: MenuItemProps) => {
         </div>
       </div>
       <img
-        src='/images/pork.png'
+        src={imageUrl ? imageUrl : '/images/pork.png'}
         alt='pork'
         className='h-20 w-20 rounded-lg object-cover'
       />
@@ -27,4 +27,4 @@ const MenuItem = ({ name, imageUrl }: MenuItemProps) => {
   )
 }
 
-export default MenuItem
+export default OrderItem

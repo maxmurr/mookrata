@@ -1,18 +1,19 @@
 import React from 'react'
 import { Drawer, DrawerContent, DrawerTrigger } from '../ui/drawer'
 import EditTableForm from '../form/edit-table-form'
+import { Table } from '@prisma/client'
 
 type EditTableDrawerProps = {
-  tableId: number
+  table: Table
   children: React.ReactNode
 }
 
-const EditTableDrawer = ({ children, tableId }: EditTableDrawerProps) => {
+const EditTableDrawer = ({ children, table }: EditTableDrawerProps) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
-        <EditTableForm tableId={tableId} />
+        <EditTableForm table={table} />
       </DrawerContent>
     </Drawer>
   )

@@ -14,13 +14,13 @@ import { db } from '@/server/db'
 declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
-      id: string
+      id: number
       name: string
     } & DefaultSession['user']
   }
 
   interface User {
-    id: string
+    id: number
     name: string
   }
 }
@@ -46,13 +46,12 @@ export const authOptions: NextAuthOptions = {
       }
       return token
     },
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session({ session, token }) {
+      if (token && session.user) {
+        session.user.id = token.id as number
+      }
+      return session
+    },
   },
   providers: [
     CredentialsProvider({
@@ -63,7 +62,6 @@ export const authOptions: NextAuthOptions = {
         password: { type: 'password' },
       },
       async authorize(credentials): Promise<User | null> {
-        console.log(credentials)
         try {
           if (!credentials) {
             throw new Error('No credentials.')
@@ -93,7 +91,7 @@ export const authOptions: NextAuthOptions = {
 
           return {
             ...user,
-            id: user.id.toString(),
+            id: user.id,
           }
         } catch (e) {
           console.error(e)

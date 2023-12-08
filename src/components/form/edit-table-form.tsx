@@ -16,6 +16,7 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { createTable, updateTable } from '../../lib/actions/table'
 import toast from 'react-hot-toast'
+import { Table } from '@prisma/client'
 
 const editTableSchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อโต๊ะ'),
@@ -24,19 +25,19 @@ const editTableSchema = z.object({
 type EditTableInput = z.infer<typeof editTableSchema>
 
 type EditTableFormProps = {
-  tableId: number
+  table: Table
 }
 
-const EditTableForm = ({ tableId }: EditTableFormProps) => {
+const EditTableForm = ({ table }: EditTableFormProps) => {
   const form = useForm<EditTableInput>({
     resolver: zodResolver(editTableSchema),
     defaultValues: {
-      name: '',
+      name: table?.name ?? '',
     },
   })
 
   const onSubmit = async (data: EditTableInput) => {
-    await updateTable(tableId, data.name)
+    await updateTable(table.id, data.name)
       .then(() => {
         toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
         const escEvent = new KeyboardEvent('keydown', { key: 'Escape' })

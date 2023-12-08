@@ -1,8 +1,23 @@
 import React from 'react'
 import Link from 'next/link'
 import Header from '../../../components/header'
+import { Button } from '../../../components/ui/button'
+import { Icons } from '../../../components/icons'
+import { getServerAuthSession } from '../../../server/auth'
+import { redirect } from 'next/navigation'
+import { getCategories } from '../../../lib/actions/category'
+import MenuCard from '../../../components/menu-card'
+import CategoryCard from '../../../components/category-card'
 
-const MenuPage = () => {
+const MenuPage = async () => {
+  const session = await getServerAuthSession()
+
+  if (!session) {
+    redirect('/dashboard/sign-in')
+  }
+
+  const categories = await getCategories()
+
   return (
     <main>
       <div className='flex py-0 px-4 flex-col items-start gap-2 border-b'>
@@ -32,7 +47,27 @@ const MenuPage = () => {
           </Link>
         </div>
       </div>
-      <section className='flex p-4 flex-col items-start gap-4 flex-1'></section>
+      <section className='flex p-4 flex-col items-start gap-4 flex-1 w-full'>
+        <div className='flex items-start justify-between w-full'>
+          <p className='text-lg font-semibold'>หมวดหมู่อาหาร</p>
+          <Link href={'/dashboard/menu/category'}>
+            <Button className='text-white py-[10px] px-[14px] gap-2 items-center flex justify-center'>
+              <Icons.plus className='text-white fill-white w-5 h-5' />
+              <p>เพิ่มหมวดหมู่</p>
+            </Button>
+          </Link>
+        </div>
+        <div className='grid grid-cols-2 w-full gap-4'>
+          {categories.map(category => (
+            <Link
+              key={category.id}
+              href={`/dashboard/menu/category/${category.id}`}
+            >
+              <CategoryCard name={category.name} imageUrl={category.image} />
+            </Link>
+          ))}
+        </div>
+      </section>
     </main>
   )
 }
