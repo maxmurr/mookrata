@@ -14,8 +14,6 @@ export const getTranslationOrderStatus = (status: OrderStatus) => {
       return 'กำลังเตรียมอาหาร...'
     case OrderStatus.completed:
       return 'เสิร์ฟแล้ว'
-    case OrderStatus.cancelled:
-      return 'ยกเลิกแล้ว'
     default:
       return 'ได้รับออเดอร์แล้ว'
   }
