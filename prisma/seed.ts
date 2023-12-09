@@ -1,7 +1,9 @@
+import { products } from './seed-data/products'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { users } from './seed-data/users'
 import { tables } from './seed-data/tables'
+import { categories } from './seed-data/categories'
 
 const prisma = new PrismaClient()
 
@@ -29,6 +31,34 @@ async function main() {
       update: {},
       create: {
         name: table.name,
+      },
+    })
+  }
+
+  for (const category of categories) {
+    await prisma.category.upsert({
+      where: {
+        name: category.name,
+      },
+      update: {},
+      create: {
+        name: category.name,
+        userId: category.userId,
+      },
+    })
+  }
+
+  for (const product of products) {
+    await prisma.product.upsert({
+      where: {
+        name: product.name,
+      },
+      update: {},
+      create: {
+        name: product.name,
+        price: product.price,
+        categoryId: product.categoryId,
+        userId: product.userId,
       },
     })
   }

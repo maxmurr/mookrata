@@ -58,7 +58,7 @@ const EditCategoryPage = async ({ params }: EditCategoryPageProps) => {
           </Button>
         </CreateProductDrawer>
       </div>
-      {!!category.products?.length && (
+      {!!category.products?.length ? (
         <section className='grid grid-cols-2 items-start gap-4 w-full p-4'>
           {category.products.map(product => (
             <EditProductDrawer
@@ -76,13 +76,12 @@ const EditCategoryPage = async ({ params }: EditCategoryPageProps) => {
             </EditProductDrawer>
           ))}
         </section>
-      )}
-      {!category.products?.length && (
-        <section className='flex p-4 m-auto flex-col justify-center items-center gap-4 flex-1 h-full'>
+      ) : (
+        <div className='flex p-4 m-auto flex-col justify-center items-center gap-4 flex-1 h-full'>
           <p className='text-base font-medium text-gray-500'>
             ยังไม่มีรายการอาหาร
           </p>
-        </section>
+        </div>
       )}
     </main>
   )

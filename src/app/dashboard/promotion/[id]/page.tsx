@@ -3,11 +3,13 @@ import { getServerAuthSession } from '../../../../server/auth'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Icons } from '../../../../components/icons'
-import CreatePromotionForm from '../../../../components/form/create-promotion-form'
 import { Button } from '../../../../components/ui/button'
 import { getPromotionById } from '../../../../lib/actions/promotion'
 import EditPromotionForm from '../../../../components/form/edit-promotion-form'
 import { Promotion } from '@prisma/client'
+import ProductItem from '../../../../components/product-item'
+import ProductItemDrawer from '../../../../components/drawer/product-item-drawer'
+import { ScrollArea } from '../../../../components/ui/scroll-area'
 
 type EditPromotionPageProps = {
   params: {
@@ -55,6 +57,35 @@ const EditPromotionPage = async ({ params }: EditPromotionPageProps) => {
           </Button>
         </Link>
       </div>
+      {!!promotion.productCart?.productCartItems.length ? (
+        <section className='flex p-4 flex-col justify-center items-start gap-4 flex-1 h-full'>
+          <div className='w-full gap-4'>
+            <ScrollArea className='flex flex-col gap-4 max-h-40'>
+              {promotion.productCart.productCartItems.map(item => (
+                <ProductItemDrawer
+                  key={item.id}
+                  product={item.product}
+                  promotion={promotion}
+                  isEdit
+                >
+                  <ProductItem
+                    name={item.product.name}
+                    quantity={item.quantity}
+                    imageUrl={item.product.image}
+                    isEdit
+                  />
+                </ProductItemDrawer>
+              ))}
+            </ScrollArea>
+          </div>
+        </section>
+      ) : (
+        <div className='flex p-4 m-auto flex-col justify-center items-center gap-4 flex-1 h-full'>
+          <p className='text-base font-medium text-gray-500'>
+            ยังไม่มีรายการอาหาร
+          </p>
+        </div>
+      )}
     </main>
   )
 }

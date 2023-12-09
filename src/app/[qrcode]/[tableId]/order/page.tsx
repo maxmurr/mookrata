@@ -6,36 +6,46 @@ import {
   TabsList,
   TabsTrigger,
 } from '../../../../components/ui/tabs'
-import MenuItem from '../../../../components/order-item'
 import { Button } from '../../../../components/ui/button'
 import { ScrollArea } from '../../../../components/ui/scroll-area'
-import ProductDrawer from '../../../../components/drawer/product-drawer'
 import { isValideQrCode } from '../../../../lib/actions/qrcode'
 import { notFound } from 'next/navigation'
-import OrderItem from '../../../../components/order-item'
+import ProductItem from '../../../../components/product-item'
+import Link from 'next/link'
+import OrderList from '../../../../components/cart-list'
+import CartList from '../../../../components/cart-list'
 
 type OrderPageProps = {
   params: {
     qrcode: string
-    id: string
+    tableId: string
   }
 }
 
 const OrderPage = async ({ params }: OrderPageProps) => {
-  const isValidQrCode = await isValideQrCode(Number(params.id), params.qrcode)
+  const isValidQrCode = await isValideQrCode(
+    Number(params.tableId),
+    params.qrcode
+  )
 
   if (!isValidQrCode) {
     return notFound()
   }
+
   return (
     <main>
       <div className='flex h-16 p-2 items-center gap-2 shrink-0 border-b'>
-        <div className='flex p-[10px] justify-center items-center '>
-          <Icons.arrow_left className='w-5 h-5' />
-        </div>
-        <p className='text-gray-900 text-center text-xl font-semibold'>
-          รายการอาหาร
-        </p>
+        <Link
+          href={`/${params.qrcode}/${params.tableId}/table`}
+          className='flex items-center'
+        >
+          <div className='flex p-[10px] justify-center items-center '>
+            <Icons.arrow_left className='w-5 h-5' />
+          </div>
+          <p className='text-gray-900 text-center text-xl font-semibold'>
+            รายการอาหาร
+          </p>
+        </Link>
       </div>
       <section className='container mx-auto p-4 flex flex-col items-center justify-center space-y-4 flex-1'>
         <Tabs
@@ -52,11 +62,7 @@ const OrderPage = async ({ params }: OrderPageProps) => {
           </TabsList>
           <TabsContent value='ordering' className='w-full'>
             <ScrollArea className='w-full max-h-[700px] overflow-y-auto'>
-              <ProductDrawer>
-                <OrderItem name='หมูสไลด์' />
-              </ProductDrawer>
-              <OrderItem name='หมูสไลด์' />
-              <OrderItem name='หมูสไลด์' />
+              <CartList />
             </ScrollArea>
             <div className='flex w-full p-4 items-center gap-4 border-t mt-4 fixed bottom-0 right-0'>
               <Button className='w-full'>สั่งอาหารเลย!</Button>
@@ -64,10 +70,8 @@ const OrderPage = async ({ params }: OrderPageProps) => {
           </TabsContent>
           <TabsContent value='ordered' className='w-full'>
             <ScrollArea className='w-full max-h-80 overflow-y-auto'>
-              <OrderItem name='หมูสไลด์' />
-              <OrderItem name='หมูสไลด์' />
-              <OrderItem name='หมูสไลด์' />
-              <OrderItem name='หมูสไลด์' />
+              <ProductItem name='หมูสไลด์' quantity={0} />
+              <ProductItem name='หมูสไลด์' quantity={0} />
             </ScrollArea>
             <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
               <p className='text-lg font-semibold text-gray-900'>รวมทั้งหมด</p>

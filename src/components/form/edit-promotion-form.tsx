@@ -18,16 +18,13 @@ import { Textarea } from '../ui/textarea'
 import { Icons } from '../icons'
 import toast from 'react-hot-toast'
 import { useUploadThing } from '../../lib/uploadthing'
-import { createPromotion } from '../../lib/actions/promotion'
+import { updatePromotion } from '../../lib/actions/promotion'
 import { useRouter } from 'next/navigation'
 import { Promotion } from '@prisma/client'
 
 const editPromotionSchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อโปรโมชั่น'),
-  price: z.number().refine(value => {
-    const parsed = Number(value)
-    return !isNaN(parsed)
-  }, 'กรุณากรอกราคาสินค้า'),
+  price: z.preprocess(x => Number(x), z.number()),
   description: z.string().optional(),
   image: z.string().optional(),
 })
@@ -64,7 +61,6 @@ const EditPromotionForm = ({ promotion }: EditPromotionFormProps) => {
 
   const onSubmit = async (data: EditPromotionInput) => {
     if (!!files.length) {
-      console.log(files)
       await startUpload(files).then(res => {
         console.log(res)
         if (!res) return
@@ -72,7 +68,8 @@ const EditPromotionForm = ({ promotion }: EditPromotionFormProps) => {
       })
     }
 
-    await createPromotion(
+    await updatePromotion(
+      promotion.id,
       data.name,
       Number(data.price),
       data.description,
@@ -83,8 +80,9 @@ const EditPromotionForm = ({ promotion }: EditPromotionFormProps) => {
         router.push('/dashboard/promotion')
         router.refresh()
       })
-      .then(() => {
+      .catch(e => {
         toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
+        console.log('Error: ', e)
       })
   }
 

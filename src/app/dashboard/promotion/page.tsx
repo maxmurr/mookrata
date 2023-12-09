@@ -18,7 +18,7 @@ const PromotionPage = async () => {
   const promotions = await getPromotions()
 
   return (
-    <main>
+    <main className='h-screen'>
       <div className='flex py-0 px-4 flex-col items-start gap-2 border-b'>
         <div className='w-full mt-2'>
           <Header />
@@ -55,22 +55,30 @@ const PromotionPage = async () => {
           </Link>
         </div>
       </section>
-      <section className='grid grid-cols-2 items-start gap-4 w-full p-4'>
-        {promotions.map(promotion => (
-          <Link
-            href={`/dashboard/promotion/${promotion.id}`}
-            key={promotion.id}
-          >
-            <MenuCard
-              name={promotion.name}
-              price={promotion.price}
-              imageUrl={promotion.image}
-              id={promotion.id}
-              width={173}
-            />
-          </Link>
-        ))}
-      </section>
+      {!!promotions.length ? (
+        <section className='grid grid-cols-2 items-start gap-4 w-full p-4'>
+          {promotions.map(promotion => (
+            <Link
+              href={`/dashboard/promotion/${promotion.id}`}
+              key={promotion.id}
+            >
+              <MenuCard
+                name={promotion.name}
+                price={promotion.price}
+                imageUrl={promotion.image}
+                id={promotion.id}
+                width={173}
+              />
+            </Link>
+          ))}
+        </section>
+      ) : (
+        <div className='flex justify-center items-center w-full h-full'>
+          <p className='text-gray-500 text-base font-medium'>
+            ยังไม่มีรายการโปรโมชัน
+          </p>
+        </div>
+      )}
     </main>
   )
 }

@@ -17,10 +17,14 @@ const NotFoundPage = () => {
             เกิดข้อผิดพลาด กรุณาติดต่อพนักงาน
           </p>
         </div>
-        <Button variant={'outline'} size='lg' onClick={() => router.back()}>
+        <Button
+          variant={'outline'}
+          size='lg'
+          onClick={() => router.push('/dashboard/table')}
+        >
           <div className='flex gap-2'>
             <Icons.arrow_left className='w-5 h-5' />
-            ย้อนกลับ
+            กลับหน้าหลัก
           </div>
         </Button>
       </div>

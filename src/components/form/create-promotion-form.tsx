@@ -23,13 +23,7 @@ import { useRouter } from 'next/navigation'
 
 const createPromotionSchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อโปรโมชั่น'),
-  price: z
-    .string()
-    .nonempty('กรุณากรอกราคาสินค้า')
-    .refine(value => {
-      const parsed = Number(value)
-      return !isNaN(parsed)
-    }, 'กรุณากรอกราคาสินค้า'),
+  price: z.preprocess(x => Number(x), z.number()),
   description: z.string().optional(),
   image: z.string().optional(),
 })
@@ -78,8 +72,9 @@ const CreatePromotionForm = () => {
         router.push('/dashboard/promotion')
         router.refresh()
       })
-      .then(() => {
+      .catch(e => {
         toast.error('เพิ่มโปรโมชั่นไม่สำเร็จ')
+        console.log('Error: ', e)
       })
   }
 

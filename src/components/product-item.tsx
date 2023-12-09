@@ -1,21 +1,28 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
 
-type OrderItemProps = {
+type ProductItemProps = {
   name: string
   imageUrl?: string | null
+  quantity: number
+  isEdit?: boolean
 }
 
-const OrderItem = ({ name, imageUrl }: OrderItemProps) => {
+const ProductItem = ({
+  name,
+  imageUrl,
+  quantity,
+  isEdit,
+}: ProductItemProps) => {
   return (
     <div className='flex h-20 justify-between items-start w-full'>
       <div className='flex items-start gap-4'>
         <div className='flex py-[2px] px-[9px] justify-center items-center rounded-[4px] border border-gray-200'>
-          2
+          {quantity}
         </div>
         <div className='flex flex-col items-start gap-2'>
           <p className='text-base text-gray-900'>{name}</p>
-          <p className='text-brand text-sm font-semibold'>แก้ไข</p>
+          {isEdit && <p className='text-brand text-sm font-semibold'>แก้ไข</p>}
         </div>
       </div>
       <img
@@ -27,4 +34,4 @@ const OrderItem = ({ name, imageUrl }: OrderItemProps) => {
   )
 }
 
-export default OrderItem
+export default ProductItem

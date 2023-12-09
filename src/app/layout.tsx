@@ -7,6 +7,7 @@ import './globals.css'
 import { extractRouterConfig } from 'uploadthing/server'
 import { ourFileRouter } from './api/uploadthing/core'
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
+import { Provider as JotaiProvider } from 'jotai'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,7 +27,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Toaster position='bottom-center' />
-        {children}
+        <JotaiProvider>{children}</JotaiProvider>
       </body>
     </html>
   )

@@ -19,7 +19,7 @@ const MenuPage = async () => {
   const categories = await getCategories()
 
   return (
-    <main>
+    <main className='h-screen'>
       <div className='flex py-0 px-4 flex-col items-start gap-2 border-b'>
         <div className='w-full mt-2'>
           <Header />
@@ -47,7 +47,7 @@ const MenuPage = async () => {
           </Link>
         </div>
       </div>
-      <section className='flex p-4 flex-col items-start gap-4 flex-1 w-full'>
+      <div className='flex p-4 flex-col items-start gap-4 flex-1 w-full'>
         <div className='flex items-start justify-between w-full'>
           <p className='text-lg font-semibold'>หมวดหมู่อาหาร</p>
           <Link href={'/dashboard/menu/category'}>
@@ -57,7 +57,9 @@ const MenuPage = async () => {
             </Button>
           </Link>
         </div>
-        <div className='grid grid-cols-2 w-full gap-4'>
+      </div>
+      {!!categories.length ? (
+        <section className='grid grid-cols-2 items-start gap-4 w-full p-4'>
           {categories.map(category => (
             <Link
               key={category.id}
@@ -66,8 +68,14 @@ const MenuPage = async () => {
               <CategoryCard name={category.name} imageUrl={category.image} />
             </Link>
           ))}
+        </section>
+      ) : (
+        <div className='flex justify-center items-center w-full h-full'>
+          <p className='text-gray-500 text-base font-medium'>
+            ยังไม่มีหมวดหมู่
+          </p>
         </div>
-      </section>
+      )}
     </main>
   )
 }

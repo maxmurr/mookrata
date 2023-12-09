@@ -24,13 +24,7 @@ import { useUploadThing } from '../../lib/uploadthing'
 
 const editProductSchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อสินค้า'),
-  price: z
-    .string()
-    .nonempty('กรุณากรอกราคาสินค้า')
-    .refine(value => {
-      const parsed = Number(value)
-      return !isNaN(parsed)
-    }, 'กรุณากรอกราคาสินค้า'),
+  price: z.preprocess(x => Number(x), z.number()),
   description: z.string().optional(),
   image: z.string().optional(),
 })
@@ -49,7 +43,7 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
     resolver: zodResolver(editProductSchema),
     defaultValues: {
       name: product.name ?? '',
-      price: product.price.toString() ?? undefined,
+      price: product.price ?? undefined,
       description: product.description ?? undefined,
     },
   })
