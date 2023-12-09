@@ -8,17 +8,20 @@ import Link from 'next/link'
 
 type CartNotificationProps = {
   href: string
+  table: any
 }
 
-const CartNotification = ({ href }: CartNotificationProps) => {
+const CartNotification = ({ href, table }: CartNotificationProps) => {
   const cartItemsQuantity = useAtomValue(cartItemsQuantityAtom)
 
   return (
-    cartItemsQuantity > 0 && (
+    !!table.orders?.length && (
       <div className='flex w-full p-4 items-center gap-4 border-t mt-4 fixed bottom-0'>
         <Link href={href} className='w-full'>
           <Button className='w-full'>
-            ตะกร้าของคุณ (รอสั่ง {cartItemsQuantity} รายการ)
+            {cartItemsQuantity > 0
+              ? `ตะกร้าของคุณ (รอสั่ง ${cartItemsQuantity} รายการ)`
+              : 'ตรวจสอบรายการอาหาร'}
           </Button>
         </Link>
       </div>

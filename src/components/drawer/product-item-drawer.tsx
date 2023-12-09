@@ -5,7 +5,7 @@ import React, { useEffect } from 'react'
 import { Drawer, DrawerContent, DrawerTrigger } from '../ui/drawer'
 import { Button } from '../ui/button'
 import { Icons } from '../icons'
-import { Product, Promotion } from '@prisma/client'
+import { Product } from '@prisma/client'
 import { useCart } from '../../hooks/use-cart-hook'
 import {
   deletePromotionProductCartProductItem,
@@ -16,8 +16,9 @@ import toast from 'react-hot-toast'
 type ProductItemDrawerProps = {
   children: React.ReactNode
   product: Product
-  promotion?: Promotion
+  promotion?: any
   isEdit?: boolean
+  isRemove?: boolean
 }
 
 const ProductItemDrawer = ({
@@ -25,6 +26,7 @@ const ProductItemDrawer = ({
   product,
   promotion,
   isEdit,
+  isRemove,
 }: ProductItemDrawerProps) => {
   const {
     addProductToCart,
@@ -42,10 +44,12 @@ const ProductItemDrawer = ({
     }
 
     setProductCart(
-      promotion.productCart.productCartItems.map(item => ({
-        product: item.product,
-        quantity: item.quantity,
-      }))
+      promotion.productCart.productCartItems.map(
+        (item: { product: Product; quantity: number }) => ({
+          product: item.product,
+          quantity: item.quantity,
+        })
+      )
     )
 
     return () => {
@@ -106,11 +110,20 @@ const ProductItemDrawer = ({
                   productCart.find(item => item.product.id === product.id)
                     ?.quantity === 0 || !productCart.length
 
+                if (isRemove) {
+                  const escEvent = new KeyboardEvent('keydown', {
+                    key: 'Escape',
+                  })
+                  document.dispatchEvent(escEvent)
+                  return
+                }
+
                 if (isEdit && isProductItemsEmpty) {
                   await deletePromotionProductCartProductItem(
                     promotion.id,
                     promotion.productCart.productCartItems.find(
-                      item => item.product.id === product.id
+                      (item: { product: { id: number } }) =>
+                        item.product.id === product.id
                     ).id
                   )
                     .then(() => {

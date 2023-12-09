@@ -5,16 +5,17 @@ import { getServerAuthSession } from '../../server/auth'
 import { db } from '../../server/db'
 
 export const getCategories = async () => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   return db.category.findMany({
-    where: {
-      userId: Number(session.user.id),
-    },
     include: {
-      products: true,
+      products: {
+        include: {
+          productCartItems: {
+            include: {
+              productCart: true,
+            },
+          },
+        },
+      },
     },
   })
 }
@@ -37,16 +38,20 @@ export const createCategory = async (name: string, image?: string) => {
 }
 
 export const getCategoryById = async (id: number) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const category = await db.category.findUnique({
     where: {
       id,
     },
     include: {
-      products: true,
+      products: {
+        include: {
+          productCartItems: {
+            include: {
+              productCart: true,
+            },
+          },
+        },
+      },
     },
   })
 

@@ -6,14 +6,13 @@ import {
   TabsList,
   TabsTrigger,
 } from '../../../../components/ui/tabs'
-import { Button } from '../../../../components/ui/button'
 import { ScrollArea } from '../../../../components/ui/scroll-area'
 import { isValideQrCode } from '../../../../lib/actions/qrcode'
 import { notFound } from 'next/navigation'
 import ProductItem from '../../../../components/product-item'
 import Link from 'next/link'
-import OrderList from '../../../../components/cart-list'
 import CartList from '../../../../components/cart-list'
+import { getTableById } from '../../../../lib/actions/table'
 
 type OrderPageProps = {
   params: {
@@ -30,6 +29,28 @@ const OrderPage = async ({ params }: OrderPageProps) => {
 
   if (!isValidQrCode) {
     return notFound()
+  }
+
+  const table = await getTableById(Number(params.tableId))
+
+  const calculateTotalOrderPrice = () => {
+    let total = 0
+
+    table?.orders?.forEach(order => {
+      order.productCart?.productCartItems?.forEach(item => {
+        if (item.product && item.product.price && item.quantity) {
+          total += item.product.price * item.quantity
+        }
+      })
+
+      order.promotionCart?.promotionCartItems?.forEach(item => {
+        if (item.promotion && item.promotion.price && item.quantity) {
+          total += item.quantity * item.promotion.price
+        }
+      })
+    })
+
+    return total
   }
 
   return (
@@ -61,16 +82,52 @@ const OrderPage = async ({ params }: OrderPageProps) => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value='ordering' className='w-full'>
-            <CartList tableId={Number(params.tableId)} qrCode={params.qrcode} />
+            {!!table?.orders.length ? (
+              <CartList tableId={Number(table.id)} qrCode={params.qrcode} />
+            ) : (
+              <div className='m-auto'>
+                <p className='text-base font-medium text-gray-500'>
+                  ยังไม่มีรายการที่รอสั่ง
+                </p>
+              </div>
+            )}
           </TabsContent>
           <TabsContent value='ordered' className='w-full'>
-            <ScrollArea className='w-full max-h-80 overflow-y-auto'>
-              <ProductItem name='หมูสไลด์' quantity={0} />
-              <ProductItem name='หมูสไลด์' quantity={0} />
+            <ScrollArea className='w-full max-h-[700px] overflow-y-auto'>
+              {table?.orders.map((order, orderIndex) => {
+                return order.productCart?.productCartItems?.map(
+                  (item, itemIndex) => {
+                    return (
+                      <ProductItem
+                        key={`${orderIndex}-${itemIndex}`}
+                        name={item.product.name}
+                        quantity={item.quantity}
+                        status={order.status}
+                      />
+                    )
+                  }
+                )
+              })}
+              {table?.orders.map((order, orderIndex) => {
+                return order.promotionCart?.promotionCartItems?.map(
+                  (item, itemIndex) => {
+                    return (
+                      <ProductItem
+                        key={`${orderIndex}-${itemIndex}`}
+                        name={item.promotion.name}
+                        quantity={item.quantity}
+                        status={order.status}
+                      />
+                    )
+                  }
+                )
+              })}
             </ScrollArea>
             <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
               <p className='text-lg font-semibold text-gray-900'>รวมทั้งหมด</p>
-              <p className='text-ls font-semibold text-gray-900'>1,500 บาท</p>
+              <p className='text-ls font-semibold text-gray-900'>
+                {calculateTotalOrderPrice().toFixed(2)} บาท
+              </p>
             </div>
           </TabsContent>
         </Tabs>

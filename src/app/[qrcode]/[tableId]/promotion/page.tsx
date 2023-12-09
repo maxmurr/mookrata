@@ -7,6 +7,8 @@ import { getPromotions } from '../../../../lib/actions/promotion'
 import Link from 'next/link'
 import PromotionDrawer from '../../../../components/drawer/promotion-drawer'
 import CartNotification from '../../../../components/cart-notification'
+import { getTableById } from '../../../../lib/actions/table'
+import { Table } from '@prisma/client'
 
 type PromotionPageProps = {
   params: {
@@ -26,6 +28,7 @@ const PromotionPage = async ({ params }: PromotionPageProps) => {
   }
 
   const promotions = await getPromotions()
+  const table = await getTableById(Number(params.tableId))
 
   return (
     <main>
@@ -55,7 +58,10 @@ const PromotionPage = async ({ params }: PromotionPageProps) => {
           ))}
         </div>
       </section>
-      <CartNotification href={`/${params.qrcode}/${params.tableId}/order`} />
+      <CartNotification
+        href={`/${params.qrcode}/${params.tableId}/order`}
+        table={table as unknown as Table}
+      />
     </main>
   )
 }

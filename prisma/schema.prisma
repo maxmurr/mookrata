@@ -12,7 +12,6 @@ enum OrderStatus {
   pending
   processing
   completed
-  cancelled
 }
 
 model User {

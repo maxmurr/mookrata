@@ -105,7 +105,10 @@ const TablePage = async ({ params }: TablePageProps) => {
           ))}
         </div>
       </section>
-      <CartNotification href={`/${params.qrcode}/${params.tableId}/order`} />
+      <CartNotification
+        href={`/${params.qrcode}/${params.tableId}/order`}
+        table={table}
+      />
     </main>
   )
 }

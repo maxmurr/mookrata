@@ -29,7 +29,28 @@ export const getTableById = async (id: number) => {
       id,
     },
     include: {
-      orders: true,
+      orders: {
+        include: {
+          productCart: {
+            include: {
+              productCartItems: {
+                include: {
+                  product: true,
+                },
+              },
+            },
+          },
+          promotionCart: {
+            include: {
+              promotionCartItems: {
+                include: {
+                  promotion: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   })
 

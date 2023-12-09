@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import React from 'react'
@@ -6,13 +5,12 @@ import { Drawer, DrawerContent, DrawerTrigger } from '../ui/drawer'
 import { ScrollArea } from '../ui/scroll-area'
 import { Button } from '../ui/button'
 import { Icons } from '../icons'
-import { Promotion } from '@prisma/client'
 import ProductItem from '../product-item'
 import { useCart } from '../../hooks/use-cart-hook'
 
 type PromotionDrawerProps = {
   children: React.ReactNode
-  promotion: Promotion
+  promotion: any
 }
 
 const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
@@ -20,7 +18,6 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
     addPromotionToCart,
     removePromotionFromCart,
     promotionCart,
-    setPromotionCart,
   } = useCart()
 
   return (
@@ -49,13 +46,19 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
               </p>
               <ScrollArea className='w-full max-h-80 overflow-y-auto'>
                 <div className='flex flex-col items-start gap-4 w-full'>
-                  {promotion.productCart?.productCartItems.map(item => (
-                    <ProductItem
-                      key={item.id}
-                      name={item.product.name}
-                      quantity={item.quantity}
-                    />
-                  ))}
+                  {promotion.productCart?.productCartItems.map(
+                    (item: {
+                      id: number
+                      product: { name: string }
+                      quantity: number
+                    }) => (
+                      <ProductItem
+                        key={item.id}
+                        name={item.product.name}
+                        quantity={item.quantity}
+                      />
+                    )
+                  )}
                 </div>
               </ScrollArea>
             </div>
@@ -91,20 +94,19 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
             </div>
             <Button
               className='w-full'
-              variant={'destructive'}
               disabled={
                 promotionCart.find(item => item.promotion.id === promotion.id)
                   ?.quantity === 0 || !promotionCart.length
               }
               onClick={() => {
-                setPromotionCart(
-                  promotionCart.filter(
-                    item => item.promotion.id !== promotion.id
-                  )
-                )
+                const escEvent = new KeyboardEvent('keydown', {
+                  key: 'Escape',
+                })
+                document.dispatchEvent(escEvent)
+                return
               }}
             >
-              นำออก
+              เพิ่ม
             </Button>
           </div>
         </div>

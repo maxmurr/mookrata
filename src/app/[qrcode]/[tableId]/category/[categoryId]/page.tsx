@@ -7,6 +7,8 @@ import { getCategoryById } from '../../../../../lib/actions/category'
 import Link from 'next/link'
 import ProductItemDrawer from '../../../../../components/drawer/product-item-drawer'
 import CartNotification from '../../../../../components/cart-notification'
+import { getTableById } from '../../../../../lib/actions/table'
+import { Table } from '@prisma/client'
 
 type CategoryPageProps = {
   params: {
@@ -27,6 +29,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
   }
 
   const category = await getCategoryById(Number(params.categoryId))
+  const table = await getTableById(Number(params.tableId))
 
   if (!category?.id) {
     return notFound()
@@ -50,13 +53,16 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
       <section className='container mx-auto p-4 flex-col items-start space-y-4 flex-1'>
         <div className='grid grid-cols-2 items-start gap-4 w-full'>
           {category.products.map(product => (
-            <ProductItemDrawer key={product.id} product={product}>
+            <ProductItemDrawer key={product.id} product={product} isRemove>
               <MenuCard name={product.name} price={product.price} width={173} />
             </ProductItemDrawer>
           ))}
         </div>
       </section>
-      <CartNotification href={`/${params.qrcode}/${params.tableId}/order`} />
+      <CartNotification
+        href={`/${params.qrcode}/${params.tableId}/order`}
+        table={table as unknown as Table}
+      />
     </main>
   )
 }

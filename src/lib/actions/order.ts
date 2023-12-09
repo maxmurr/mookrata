@@ -4,6 +4,7 @@ import { ProductCart, PromotionCart } from '../atoms'
 import { getServerAuthSession } from '../../server/auth'
 import { db } from '../../server/db'
 import { revalidatePath } from 'next/cache'
+import { OrderStatus } from '@prisma/client'
 
 export const createOrder = async (
   tableId: number,
@@ -82,6 +83,27 @@ export const createOrder = async (
     await Promise.all(createdProductCartItems)
   }
 
-  revalidatePath('/dashboard/order')
+  revalidatePath('/dashboard/table')
   return createdOrder
+}
+
+export const updateOrderStatus = async (
+  id: number,
+  status: OrderStatus,
+) => {
+  const session = await getServerAuthSession()
+
+  if (!session) throw new Error('Unauthorized')
+
+  const order = await db.order.update({
+    where: {
+      id,
+    },
+    data: {
+      status,
+    },
+  })
+
+  revalidatePath(`/dashboard/order`)
+  return order
 }

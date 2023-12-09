@@ -1,11 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
+import { OrderStatus } from '@prisma/client'
 import React from 'react'
+import { getTranslationOrderStatus } from '../lib/utils'
 
 type ProductItemProps = {
   name: string
   imageUrl?: string | null
   quantity: number
   isEdit?: boolean
+  status?: OrderStatus
 }
 
 const ProductItem = ({
@@ -13,6 +16,7 @@ const ProductItem = ({
   imageUrl,
   quantity,
   isEdit,
+  status,
 }: ProductItemProps) => {
   return (
     <div className='flex h-20 justify-between items-start w-full'>
@@ -23,6 +27,15 @@ const ProductItem = ({
         <div className='flex flex-col items-start gap-2'>
           <p className='text-base text-gray-900'>{name}</p>
           {isEdit && <p className='text-brand text-sm font-semibold'>แก้ไข</p>}
+          {status && (
+            <p
+              className={`${
+                status === 'completed' ? 'text-green-700' : 'text-gray-700'
+              } text-sm`}
+            >
+              {getTranslationOrderStatus(status)}
+            </p>
+          )}
         </div>
       </div>
       <img
