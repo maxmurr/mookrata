@@ -42,15 +42,13 @@ model Table {
 }
 
 model Order {
-  id              Int            @id @default(autoincrement()) @map("order_id")
-  status          OrderStatus    @default(pending)
-  tableId         Int            @map("table_id")
-  table           Table          @relation(fields: [tableId], references: [id])
-  createdAt       DateTime       @default(now()) @map("created_at") @db.DateTime(6)
-  promotionCartId Int?           @map("promotion_cart_id")
-  promotionCart   PromotionCart?
-  productCartId   Int?           @map("product_cart_id")
-  productCart     ProductCart?
+  id            Int            @id @default(autoincrement()) @map("order_id")
+  status        OrderStatus    @default(pending)
+  tableId       Int            @map("table_id")
+  table         Table          @relation(fields: [tableId], references: [id])
+  createdAt     DateTime       @default(now()) @map("created_at") @db.DateTime(6)
+  promotionCart PromotionCart?
+  productCart   ProductCart?
 
   @@index([tableId])
   @@map("orders")
@@ -124,7 +122,6 @@ model Promotion {
   userId             Int                 @map("user_id")
   user               User                @relation(fields: [userId], references: [id])
   createdAt          DateTime            @default(now()) @map("created_at") @db.DateTime(6)
-  productCartId      Int?                @unique @map("product_cart_id")
   productCart        ProductCart?
   promotionCartItems PromotionCartItem[]
 

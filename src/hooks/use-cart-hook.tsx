@@ -101,6 +101,11 @@ export const useCart = () => {
     }
   }
 
+  const clearCart = () => {
+    setProductCart([])
+    setPromotionCart([])
+  }
+
   return {
     addProductToCart,
     removeProductFromCart,
@@ -111,5 +116,6 @@ export const useCart = () => {
     promotionCart,
 		setPromotionCart,
     cartItemsQuantity,
+    clearCart,
   }
 }

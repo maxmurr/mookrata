@@ -61,12 +61,7 @@ const OrderPage = async ({ params }: OrderPageProps) => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value='ordering' className='w-full'>
-            <ScrollArea className='w-full max-h-[700px] overflow-y-auto'>
-              <CartList />
-            </ScrollArea>
-            <div className='flex w-full p-4 items-center gap-4 border-t mt-4 fixed bottom-0 right-0'>
-              <Button className='w-full'>สั่งอาหารเลย!</Button>
-            </div>
+            <CartList tableId={Number(params.tableId)} qrCode={params.qrcode} />
           </TabsContent>
           <TabsContent value='ordered' className='w-full'>
             <ScrollArea className='w-full max-h-80 overflow-y-auto'>
