@@ -95,6 +95,7 @@ const OrderPage = async ({ params }: OrderPageProps) => {
                             key={`${orderIndex}-${itemIndex}`}
                             name={item.product.name}
                             quantity={item.quantity}
+                            imageUrl={item.product.image}
                             status={order.status}
                           />
                         )

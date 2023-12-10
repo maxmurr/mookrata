@@ -23,7 +23,7 @@ const MenuCard = ({ name, price, imageUrl, id, classNames }: MenuCardProps) => {
     >
       <AspectRatio ratio={16 / 9} className='h-40 w-full'>
         <Image
-          src={imageUrl ? imageUrl : '/images/promotion.jpeg'}
+          src={imageUrl ? imageUrl : '/images/pork.png'}
           alt='promotion'
           fill
           objectFit='cover'

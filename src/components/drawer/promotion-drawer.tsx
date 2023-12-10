@@ -9,6 +9,7 @@ import ProductItem from '../product-item'
 import { useCart } from '../../hooks/use-cart-hook'
 import Image from 'next/image'
 import { AspectRatio } from '../ui/aspect-ratio'
+import { Promotion } from '@prisma/client'
 
 type PromotionDrawerProps = {
   children: React.ReactNode
@@ -52,12 +53,13 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
                   {promotion.productCart?.productCartItems.map(
                     (item: {
                       id: number
-                      product: { name: string }
+                      product: Promotion
                       quantity: number
                     }) => (
                       <ProductItem
                         key={item.id}
                         name={item.product.name}
+                        imageUrl={item.product.image}
                         quantity={item.quantity}
                       />
                     )

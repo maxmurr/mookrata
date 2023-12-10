@@ -8,6 +8,11 @@ const nextConfig = {
         hostname: 'promptpay.io',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'files.edgestore.dev',
+        port: '',
+      },
     ],
   },
   typescript: {

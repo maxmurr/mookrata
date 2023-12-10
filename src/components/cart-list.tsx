@@ -42,6 +42,7 @@ const CartList = ({ tableId, qrCode }: CartListProps) => {
                 <ProductItem
                   name={item.promotion.name}
                   quantity={item.quantity}
+                  imageUrl={item.promotion.image}
                   isEdit
                 />
               </PromotionDrawer>
