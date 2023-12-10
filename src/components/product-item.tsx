@@ -43,7 +43,7 @@ const ProductItem = ({
       <div className='w-20 h-20'>
         <AspectRatio ratio={16 / 9} className='h-20'>
           <Image
-            src={imageUrl ? imageUrl : '/images/bacon.png'}
+            src={imageUrl ? imageUrl : '/images/bacon.jpeg'}
             alt='pork'
             fill
             objectFit='cover'

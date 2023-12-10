@@ -133,9 +133,11 @@ export const disconnectOrderFromTable = async (id: number) => {
     },
     data: {
       orders: undefined,
-      qrCode: undefined,
+      qrCode: null,
     },
   })
+
+  console.log(updatedOrders, updatedTable)
 
   revalidatePath(`/dashboard/table`)
   return {
