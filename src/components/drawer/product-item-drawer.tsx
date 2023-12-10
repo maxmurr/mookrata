@@ -60,8 +60,8 @@ const ProductItemDrawer = ({
 
   return (
     <Drawer>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
-      <DrawerContent>
+      <DrawerTrigger>{children}</DrawerTrigger>
+      <DrawerContent className='w-full'>
         <div className='h-full flex flex-col justify-between pt-4'>
           <div className='flex py-0 px-4 flex-col items-start gap-4 h-96 justify-between'>
             <AspectRatio ratio={16 / 9} className='w-full h-72'>

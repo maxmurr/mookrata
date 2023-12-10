@@ -22,7 +22,7 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
 
   return (
     <Drawer>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+      <DrawerTrigger>{children}</DrawerTrigger>
       <DrawerContent>
         <div className='h-full flex flex-col justify-between pt-4'>
           <div className='flex py-0 px-4 flex-col items-start gap-4 h- justify-between'>
