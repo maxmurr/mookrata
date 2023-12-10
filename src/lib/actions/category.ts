@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { getServerAuthSession } from '../../server/auth'
 import { db } from '../../server/db'
 
 export const getCategories = async () => {
