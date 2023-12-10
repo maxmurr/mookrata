@@ -6,10 +6,6 @@ import { db } from '../../server/db'
 import { ProductCart } from '../atoms'
 
 export const getPromotions = async () => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const promotions = await db.promotion.findMany({
     include: {
       productCart: {

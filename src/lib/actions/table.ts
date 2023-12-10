@@ -20,10 +20,6 @@ export const getTables = async () => {
 }
 
 export const getTableById = async (id: number) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const table = await db.table.findUnique({
     where: {
       id,

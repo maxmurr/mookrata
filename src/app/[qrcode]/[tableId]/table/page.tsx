@@ -14,7 +14,6 @@ import { getTableById } from '../../../../lib/actions/table'
 import CartNotification from '../../../../components/cart-notification'
 import PromotionDrawer from '../../../../components/drawer/promotion-drawer'
 import { Promotion } from '@prisma/client'
-import { AspectRatio } from '../../../../components/ui/aspect-ratio'
 
 type TablePageProps = {
   params: {
