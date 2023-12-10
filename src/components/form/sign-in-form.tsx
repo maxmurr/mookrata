@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -25,6 +25,8 @@ const signInSchema = z.object({
 type SignInput = z.infer<typeof signInSchema>
 
 const SigninForm = () => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const form = useForm<SignInput>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -34,6 +36,7 @@ const SigninForm = () => {
   })
 
   const onSubmit = async (data: SignInput) => {
+    setIsLoading(true)
     const { name, password } = data
 
     await signIn('credentials', {
@@ -43,6 +46,7 @@ const SigninForm = () => {
       redirect: true,
     })
       .then(() => {
+        setIsLoading(false)
         toast.success('เข้าสู่ระบบสำเร็จ')
         const escEvent = new KeyboardEvent('keydown', { key: 'Escape' })
         document.dispatchEvent(escEvent)
@@ -94,7 +98,7 @@ const SigninForm = () => {
             </FormItem>
           )}
         />
-        <Button className='w-full' type='submit'>
+        <Button className='w-full' type='submit' disabled={isLoading}>
           เข้าสู่ระบบ
         </Button>
       </form>
