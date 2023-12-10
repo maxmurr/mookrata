@@ -28,13 +28,13 @@ const TablePage = async () => {
           <Link
             href={'/dashboard/table'}
             className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-2 pl-1 border-b-2 border-brand'
-          >
+            legacyBehavior>
             <p className='text-sm font-semibold text-brand'>จัดการโต๊ะ</p>
           </Link>
           <Link
             href={'/dashboard/promotion'}
             className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-3 pl-1'
-          >
+            legacyBehavior>
             <p className='text-sm font-semibold text-gray-500'>
               จัดการโปรโมชั่น
             </p>
@@ -42,7 +42,7 @@ const TablePage = async () => {
           <Link
             href={'/dashboard/menu'}
             className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-3 pl-1'
-          >
+            legacyBehavior>
             <p className='text-sm font-semibold text-gray-500'>จัดการเมนู</p>
           </Link>
         </nav>
@@ -70,7 +70,7 @@ const TablePage = async () => {
         )}
       </section>
     </main>
-  )
+  );
 }
 
 export default TablePage

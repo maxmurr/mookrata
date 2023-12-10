@@ -41,7 +41,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         <Link
           href={`/${params.qrcode}/${params.tableId}/table`}
           className='flex items-center'
-        >
+          legacyBehavior>
           <div className='flex p-[10px] justify-center items-center '>
             <Icons.arrow_left className='w-5 h-5' />
           </div>
@@ -64,7 +64,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         table={table as unknown as Table}
       />
     </main>
-  )
+  );
 }
 
 export default CategoryPage

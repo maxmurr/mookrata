@@ -27,7 +27,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         <Link
           href={`/dashboard/promotion/${params.id}`}
           className='flex items-center'
-        >
+          legacyBehavior>
           <div className='flex p-[10px] justify-center items-center '>
             <Icons.arrow_left className='w-5 h-5' />
           </div>
@@ -43,14 +43,14 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
             <Link
               key={category.id}
               href={`/dashboard/promotion/${params.id}/category/${category.id}`}
-            >
+              legacyBehavior>
               <CategoryCard name={category.name} imageUrl={category.image} />
             </Link>
           ))}
         </div>
       </section>
     </main>
-  )
+  );
 }
 
 export default CategoryPage

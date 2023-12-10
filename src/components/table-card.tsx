@@ -11,7 +11,7 @@ const TableCard = ({ table }: TableCardProps) => {
     <Link
       href={`/dashboard/table/${table.id}`}
       className='flex h-[173px] p-4 flex-col justify-center items-center gap-2 flex-1 border border-gray-200 rounded-md'
-    >
+      legacyBehavior>
       <p className='text-xl text-black font-semibold'>{table.name}</p>
       <p
         className={`${
@@ -21,7 +21,7 @@ const TableCard = ({ table }: TableCardProps) => {
         {!table.qrCode ? 'ว่าง' : 'ไม่ว่าง'}
       </p>
     </Link>
-  )
+  );
 }
 
 export default TableCard

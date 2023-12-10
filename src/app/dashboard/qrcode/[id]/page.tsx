@@ -31,7 +31,7 @@ const QrcodePage = async ({ params }: QrcodePageProps) => {
         <Link
           href={`/dashboard/table/${table.id}`}
           className='flex items-center'
-        >
+          legacyBehavior>
           <div className='flex p-[10px] justify-center items-center '>
             <Icons.arrow_left className='w-5 h-5' />
           </div>
@@ -47,7 +47,7 @@ const QrcodePage = async ({ params }: QrcodePageProps) => {
         <p className='text-xl font-semibold'>แสกนเพื่อสั่งอาหาร</p>
       </section>
     </main>
-  )
+  );
 }
 
 export default QrcodePage

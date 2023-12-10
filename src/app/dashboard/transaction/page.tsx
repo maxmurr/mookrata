@@ -30,13 +30,13 @@ const TransactionPage = async () => {
           <Link
             href={'/dashboard/table'}
             className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-3 pl-1'
-          >
+            legacyBehavior>
             <p className='text-sm font-semibold text-gray-500'>จัดการโต๊ะ</p>
           </Link>
           <Link
             href={'/dashboard/promotion'}
             className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-3 pl-1'
-          >
+            legacyBehavior>
             <p className='text-sm font-semibold text-gray-500'>
               จัดการโปรโมชั่น
             </p>
@@ -44,20 +44,20 @@ const TransactionPage = async () => {
           <Link
             href={'/dashboard/menu'}
             className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-3 pl-1 '
-          >
+            legacyBehavior>
             <p className='text-sm font-semibold text-gray-500'>จัดการเมนู</p>
           </Link>
           <Link
             href={'/dashboard/transaction'}
             className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-2 pl-1 border-b-2 border-brand '
-          >
+            legacyBehavior>
             <p className='text-sm font-semibold text-brand'>Transaction</p>
           </Link>
         </div>
       </div>
       <section className='flex p-4 flex-col items-start gap-4 flex-1'></section>
     </main>
-  )
+  );
 }
 
 export default TransactionPage

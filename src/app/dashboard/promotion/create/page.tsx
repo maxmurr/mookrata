@@ -16,7 +16,10 @@ const CreatePromotionPage = async () => {
   return (
     <main>
       <div className='flex h-16 p-2 items-center justify-between gap-2 shrink-0 border-b w-full'>
-        <Link href={`/dashboard/promotion`} className='flex items-center'>
+        <Link
+          href={`/dashboard/promotion`}
+          className='flex items-center'
+          legacyBehavior>
           <div className='flex p-[10px] justify-center items-center '>
             <Icons.arrow_left className='w-5 h-5' />
           </div>
@@ -29,7 +32,7 @@ const CreatePromotionPage = async () => {
         <CreatePromotionForm />
       </section>
     </main>
-  )
+  );
 }
 
 export default CreatePromotionPage

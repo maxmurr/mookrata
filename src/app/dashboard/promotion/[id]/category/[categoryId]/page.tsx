@@ -37,7 +37,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         <Link
           href={`/dashboard/promotion/${params.id}/category`}
           className='flex items-center'
-        >
+          legacyBehavior>
           <div className='flex p-[10px] justify-center items-center '>
             <Icons.arrow_left className='w-5 h-5' />
           </div>
@@ -72,7 +72,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         </div>
       )}
     </main>
-  )
+  );
 }
 
 export default ProductPage

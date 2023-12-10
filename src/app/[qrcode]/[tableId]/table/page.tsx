@@ -70,7 +70,7 @@ const TablePage = async ({ params }: TablePageProps) => {
             <Link
               href={`/${params.qrcode}/${params.tableId}/promotion`}
               className='text-gray-600 flex items-center gap-2'
-            >
+              legacyBehavior>
               ดูทั้งหมด <Icons.arrow_right className='w-5 h-5' />
             </Link>
           </div>
@@ -99,7 +99,7 @@ const TablePage = async ({ params }: TablePageProps) => {
             <Link
               href={`/${params.qrcode}/${params.tableId}/category/${category.id}`}
               key={category.id}
-            >
+              legacyBehavior>
               <CategoryCard name={category.name} imageUrl={category.image} />
             </Link>
           ))}
@@ -110,7 +110,7 @@ const TablePage = async ({ params }: TablePageProps) => {
         table={table}
       />
     </main>
-  )
+  );
 }
 
 export default TablePage

@@ -33,7 +33,10 @@ const EditPromotionPage = async ({ params }: EditPromotionPageProps) => {
   return (
     <main>
       <div className='flex h-16 p-2 items-center justify-between gap-2 shrink-0 border-b w-full'>
-        <Link href={`/dashboard/promotion`} className='flex items-center'>
+        <Link
+          href={`/dashboard/promotion`}
+          className='flex items-center'
+          legacyBehavior>
           <div className='flex p-[10px] justify-center items-center '>
             <Icons.arrow_left className='w-5 h-5' />
           </div>
@@ -47,7 +50,7 @@ const EditPromotionPage = async ({ params }: EditPromotionPageProps) => {
       </section>
       <div className='flex items-start justify-between w-full px-4 py-2'>
         <p className='text-lg font-semibold'>รายการอาหาร</p>
-        <Link href={`/dashboard/promotion/${promotion.id}/category`}>
+        <Link href={`/dashboard/promotion/${promotion.id}/category`} legacyBehavior>
           <Button
             variant='outline'
             className=' py-[10px] px-[14px] gap-2 items-center flex justify-center'
@@ -87,7 +90,7 @@ const EditPromotionPage = async ({ params }: EditPromotionPageProps) => {
         </div>
       )}
     </main>
-  )
+  );
 }
 
 export default EditPromotionPage
