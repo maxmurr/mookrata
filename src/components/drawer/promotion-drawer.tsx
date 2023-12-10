@@ -28,7 +28,9 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
           <div className='flex py-0 px-4 flex-col items-start gap-4 h- justify-between'>
             <AspectRatio ratio={16 / 9} className='w-full h-72'>
               <Image
-                src='/images/promotion.jpeg'
+                src={
+                  promotion.image ? promotion.image : '/images/promotion.jpeg'
+                }
                 alt='promotion'
                 fill
                 objectFit='cover'

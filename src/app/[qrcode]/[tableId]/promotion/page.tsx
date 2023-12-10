@@ -48,7 +48,11 @@ const PromotionPage = async ({ params }: PromotionPageProps) => {
         <div className='grid grid-cols-2 items-start gap-4 w-full'>
           {promotions.map(promotion => (
             <PromotionDrawer key={promotion.id} promotion={promotion}>
-              <MenuCard name={promotion.name} price={promotion.price} />
+              <MenuCard
+                name={promotion.name}
+                price={promotion.price}
+                imageUrl={promotion.image}
+              />
             </PromotionDrawer>
           ))}
         </div>

@@ -53,7 +53,11 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         <div className='grid grid-cols-2 items-start gap-4 w-full'>
           {category.products.map(product => (
             <ProductItemDrawer key={product.id} product={product} isRemove>
-              <MenuCard name={product.name} price={product.price} />
+              <MenuCard
+                name={product.name}
+                price={product.price}
+                imageUrl={product.image}
+              />
             </ProductItemDrawer>
           ))}
         </div>

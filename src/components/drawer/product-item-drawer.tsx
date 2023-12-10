@@ -66,7 +66,7 @@ const ProductItemDrawer = ({
           <div className='flex py-0 px-4 flex-col items-start gap-4 h-96 justify-between'>
             <AspectRatio ratio={16 / 9} className='w-full h-72'>
               <Image
-                src='/images/pork.png'
+                src={product.image ? product.image : '/images/pork.png'}
                 alt='product image'
                 fill
                 objectFit='cover'
