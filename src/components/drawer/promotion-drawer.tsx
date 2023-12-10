@@ -22,9 +22,9 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
 
   return (
     <Drawer>
-      <DrawerTrigger>{children}</DrawerTrigger>
+      <DrawerTrigger className='w-full'>{children}</DrawerTrigger>
       <DrawerContent>
-        <div className='h-full flex flex-col justify-between pt-4'>
+        <div className='h-full flex flex-col justify-between pt-4 w-full'>
           <div className='flex py-0 px-4 flex-col items-start gap-4 h- justify-between'>
             <AspectRatio ratio={16 / 9} className='w-full h-72'>
               <Image
