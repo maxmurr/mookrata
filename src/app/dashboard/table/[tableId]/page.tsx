@@ -16,7 +16,7 @@ import OrderStatusDrawer from '../../../../components/drawer/order-status-drawer
 
 type TablePageProps = {
   params: {
-    id: string
+    tableId: string
   }
 }
 
@@ -27,7 +27,7 @@ const TablePage = async ({ params }: TablePageProps) => {
     redirect('/dashboard/sign-in')
   }
 
-  const table = await getTableById(Number(params.id))
+  const table = await getTableById(Number(params.tableId))
 
   if (!table?.id) {
     return notFound()
@@ -184,10 +184,12 @@ const TablePage = async ({ params }: TablePageProps) => {
             </div>
           ))}
           <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
-            <p className='text-lg font-semibold text-gray-900 w-full'>
+            <p className='text-lg font-semibold text-gray-900 w-fit whitespace-nowrap'>
               รวม {calculateTotalOrderPrice().toFixed(2)} บาท
             </p>
-            <Button className='w-full'>ชำระเงิน</Button>
+            <Link href={`/dashboard/billing/${table.id}`} className='w-full'>
+              <Button className='w-full'>ชำระเงิน</Button>
+            </Link>
           </div>
         </section>
       )}

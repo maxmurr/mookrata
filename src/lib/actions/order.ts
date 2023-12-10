@@ -87,10 +87,7 @@ export const createOrder = async (
   return createdOrder
 }
 
-export const updateOrderStatus = async (
-  id: number,
-  status: OrderStatus,
-) => {
+export const updateOrderStatus = async (id: number, status: OrderStatus) => {
   const session = await getServerAuthSession()
 
   if (!session) throw new Error('Unauthorized')
@@ -106,4 +103,42 @@ export const updateOrderStatus = async (
 
   revalidatePath(`/dashboard/order`)
   return order
+}
+
+export const disconnectOrderFromTable = async (id: number) => {
+  const session = await getServerAuthSession()
+
+  if (!session) throw new Error('Unauthorized')
+
+  const table = await db.table.findUnique({
+    where: {
+      id,
+    },
+  })
+
+  if (!table?.id) throw new Error('Table not found')
+
+  const updatedOrders = await db.order.updateMany({
+    where: {
+      tableId: table.id,
+    },
+    data: {
+      tableId: null,
+    },
+  })
+
+  const updatedTable = await db.table.update({
+    where: {
+      id: table.id,
+    },
+    data: {
+      orders: undefined,
+    },
+  })
+
+  revalidatePath(`/dashboard/table`)
+  return {
+    updatedOrders,
+    updatedTable,
+  }
 }

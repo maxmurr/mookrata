@@ -27,10 +27,12 @@ async function main() {
     await prisma.table.upsert({
       where: {
         name: table.name,
+        userId: table.userId,
       },
       update: {},
       create: {
         name: table.name,
+        userId: table.userId,
       },
     })
   }

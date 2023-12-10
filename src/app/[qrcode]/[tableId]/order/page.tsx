@@ -85,7 +85,7 @@ const OrderPage = async ({ params }: OrderPageProps) => {
             {!!table?.orders.length ? (
               <CartList tableId={Number(table.id)} qrCode={params.qrcode} />
             ) : (
-              <div className='m-auto'>
+              <div className='m-auto flex justify-center items-center h-screen'>
                 <p className='text-base font-medium text-gray-500'>
                   ยังไม่มีรายการที่รอสั่ง
                 </p>
@@ -94,34 +94,44 @@ const OrderPage = async ({ params }: OrderPageProps) => {
           </TabsContent>
           <TabsContent value='ordered' className='w-full'>
             <ScrollArea className='w-full max-h-[700px] overflow-y-auto'>
-              {table?.orders.map((order, orderIndex) => {
-                return order.productCart?.productCartItems?.map(
-                  (item, itemIndex) => {
-                    return (
-                      <ProductItem
-                        key={`${orderIndex}-${itemIndex}`}
-                        name={item.product.name}
-                        quantity={item.quantity}
-                        status={order.status}
-                      />
+              {!!table?.orders.length ? (
+                <>
+                  {table?.orders.map((order, orderIndex) => {
+                    return order.productCart?.productCartItems?.map(
+                      (item, itemIndex) => {
+                        return (
+                          <ProductItem
+                            key={`${orderIndex}-${itemIndex}`}
+                            name={item.product.name}
+                            quantity={item.quantity}
+                            status={order.status}
+                          />
+                        )
+                      }
                     )
-                  }
-                )
-              })}
-              {table?.orders.map((order, orderIndex) => {
-                return order.promotionCart?.promotionCartItems?.map(
-                  (item, itemIndex) => {
-                    return (
-                      <ProductItem
-                        key={`${orderIndex}-${itemIndex}`}
-                        name={item.promotion.name}
-                        quantity={item.quantity}
-                        status={order.status}
-                      />
+                  })}
+                  {table?.orders.map((order, orderIndex) => {
+                    return order.promotionCart?.promotionCartItems?.map(
+                      (item, itemIndex) => {
+                        return (
+                          <ProductItem
+                            key={`${orderIndex}-${itemIndex}`}
+                            name={item.promotion.name}
+                            quantity={item.quantity}
+                            status={order.status}
+                          />
+                        )
+                      }
                     )
-                  }
-                )
-              })}
+                  })}
+                </>
+              ) : (
+                <div className='m-auto flex justify-center items-center h-screen'>
+                  <p className='text-base font-medium text-gray-500'>
+                    ยังไม่มีรายการที่สั่งไปแล้ว
+                  </p>
+                </div>
+              )}
             </ScrollArea>
             <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
               <p className='text-lg font-semibold text-gray-900'>รวมทั้งหมด</p>
