@@ -60,7 +60,7 @@ const EditPromotionPage = async ({ params }: EditPromotionPageProps) => {
       {!!promotion.productCart?.productCartItems.length ? (
         <section className='flex p-4 flex-col justify-center items-start gap-4 flex-1 h-full'>
           <div className='w-full gap-4'>
-            <ScrollArea className='flex flex-col gap-4 max-h-40'>
+            <ScrollArea className='flex flex-col gap-4 max-h-16'>
               {promotion.productCart.productCartItems.map(item => (
                 <ProductItemDrawer
                   key={item.id}

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Anuphan } from 'next/font/google'
 
 import { Toaster } from 'react-hot-toast'
 
@@ -9,7 +9,7 @@ import { ourFileRouter } from './api/uploadthing/core'
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 import { Provider as JotaiProvider } from 'jotai'
 
-const inter = Inter({ subsets: ['latin'] })
+const anuphan = Anuphan({ subsets: ['thai'] })
 
 export const metadata: Metadata = {
   title: 'Mookrata',
@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang='th'>
       <head />
-      <body className={inter.className}>
+      <body className={anuphan.className}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Toaster position='bottom-center' />
         <JotaiProvider>{children}</JotaiProvider>

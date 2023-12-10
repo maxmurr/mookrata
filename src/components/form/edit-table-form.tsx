@@ -52,7 +52,7 @@ const EditTableForm = ({ table }: EditTableFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='flex py-0 px-4 flex-col items-start gap-4 flex-1'
+        className='flex py-0 pt-4 px-4 flex-col items-start gap-4 flex-1'
       >
         <p className='text-gray-900 text-lg font-semibold'>เพิ่มโต๊ะ</p>
         <FormField

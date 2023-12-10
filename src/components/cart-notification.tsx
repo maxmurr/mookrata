@@ -16,7 +16,7 @@ const CartNotification = ({ href, table }: CartNotificationProps) => {
 
   return (
     !!table.orders?.length && (
-      <div className='flex w-full p-4 items-center gap-4 border-t mt-4 fixed bottom-0'>
+      <div className='flex w-full p-4 items-center gap-4 border-t mt-4 fixed bottom-0 bg-background'>
         <Link href={href} className='w-full'>
           <Button className='w-full'>
             {cartItemsQuantity > 0

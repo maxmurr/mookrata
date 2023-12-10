@@ -72,7 +72,10 @@ const CreateCategoryForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-4'>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='w-full space-y-4 pt-4'
+      >
         <FormField
           name='name'
           control={form.control}
@@ -122,7 +125,7 @@ const CreateCategoryForm = () => {
             </label>
           </FormControl>
         </FormItem>
-        <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
+        <div className='flex w-full p-4 bg-background items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
           <Button className='w-full' disabled={isUploading}>
             เพิ่ม
           </Button>

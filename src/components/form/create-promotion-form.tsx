@@ -170,7 +170,7 @@ const CreatePromotionForm = () => {
             </label>
           </FormControl>
         </FormItem>
-        <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
+        <div className='flex w-full p-4 bg-background items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
           <Button className='w-full' disabled={isUploading}>
             เพิ่ม
           </Button>

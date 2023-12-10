@@ -14,17 +14,14 @@ type PromotionDrawerProps = {
 }
 
 const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
-  const {
-    addPromotionToCart,
-    removePromotionFromCart,
-    promotionCart,
-  } = useCart()
+  const { addPromotionToCart, removePromotionFromCart, promotionCart } =
+    useCart()
 
   return (
     <Drawer>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
-        <div className='h-full flex flex-col justify-between'>
+        <div className='h-full flex flex-col justify-between pt-4'>
           <div className='flex py-0 px-4 flex-col items-start gap-4'>
             <img
               src='/images/promotion.jpeg'

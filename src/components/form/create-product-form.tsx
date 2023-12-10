@@ -94,7 +94,7 @@ const CreateProductForm = ({ categoryId }: CreateProductFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='flex py-0 px-4 flex-col items-start gap-4 flex-1 w-full'
+        className='flex py-0 px-4 flex-col items-start gap-4 flex-1 w-full pt-4'
       >
         <p className='text-gray-900 text-lg font-semibold'>เพิ่มรายการอาหาร</p>
         <FormField
@@ -183,7 +183,7 @@ const CreateProductForm = ({ categoryId }: CreateProductFormProps) => {
             </label>
           </FormControl>
         </FormItem>
-        <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
+        <div className='flex w-full p-4 bg-background items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
           <Button className='w-full' disabled={isUploading}>
             เพิ่ม
           </Button>
