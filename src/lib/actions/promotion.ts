@@ -58,7 +58,7 @@ export const createPromotion = async (
   name: string,
   price: number,
   description: string | undefined,
-  image: string | undefined
+  image?: string | undefined
 ) => {
   const session = await getServerAuthSession()
 
@@ -83,7 +83,7 @@ export const updatePromotion = async (
   name: string,
   price: number,
   description: string | undefined,
-  image: string | undefined
+  image?: string | undefined
 ) => {
   const session = await getServerAuthSession()
 

@@ -46,16 +46,15 @@ const BillingPage = async ({ params }: BillingPageProps) => {
   return (
     <main>
       <div className='flex h-16 p-2 items-center justify-between gap-2 shrink-0 border-b w-full'>
-        <Link
-          href={`/dashboard/table/${params.tableId}`}
-          className='flex items-center'
-          legacyBehavior>
-          <div className='flex p-[10px] justify-center items-center '>
-            <Icons.arrow_left className='w-5 h-5' />
+        <Link href={`/dashboard/table/${params.tableId}`} legacyBehavior>
+          <div className='flex items-center'>
+            <div className='flex p-[10px] justify-center items-center '>
+              <Icons.arrow_left className='w-5 h-5' />
+            </div>
+            <p className='text-gray-900 text-center text-xl font-semibold'>
+              ชำระเงิน
+            </p>
           </div>
-          <p className='text-gray-900 text-center text-xl font-semibold'>
-            ชำระเงิน
-          </p>
         </Link>
       </div>
       <section className='flex p-4 flex-col justify-center items-center gap-4 flex-1 h-full'>
@@ -66,7 +65,7 @@ const BillingPage = async ({ params }: BillingPageProps) => {
           alt='prompt-pay'
         />
         <Image
-          src={`https://promptpay.io/0646504306/${calculateTotalOrderPrice()}.png`}
+          src={`https://promptpay.io/0646504306/${calculateTotalOrderPrice().toFixed(2)}.png`}
           alt='prompt-pay'
           width={240}
           height={240}
@@ -75,7 +74,7 @@ const BillingPage = async ({ params }: BillingPageProps) => {
         <div className='flex justify-between items-start w-full'>
           <p className='text-gray-900'>จำนวน</p>
           <p className='text-gray-900 font-semibold'>
-            {calculateTotalOrderPrice()} บาท
+            {calculateTotalOrderPrice().toFixed(2)} บาท
           </p>
         </div>
         <div className='flex justify-between items-start w-full'>
@@ -91,7 +90,7 @@ const BillingPage = async ({ params }: BillingPageProps) => {
         <PayButton tableId={Number(params.tableId)} />
       </div>
     </main>
-  );
+  )
 }
 
 export default BillingPage

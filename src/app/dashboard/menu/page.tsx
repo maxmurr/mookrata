@@ -25,25 +25,25 @@ const MenuPage = async () => {
           <Header />
         </div>
         <div className='flex items-start gap-3'>
-          <Link
-            href={'/dashboard/table'}
-            className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-3 pl-1'
-            legacyBehavior>
-            <p className='text-sm font-semibold text-gray-500'>จัดการโต๊ะ</p>
+          <Link href={'/dashboard/table'} legacyBehavior>
+            <div
+              className='flex h-8 justify-center items-center gap-2 pt-0 pr-1
+              pb-3 pl-1'
+            >
+              <p className='text-sm font-semibold text-gray-500'>จัดการโต๊ะ</p>
+            </div>
           </Link>
-          <Link
-            href={'/dashboard/promotion'}
-            className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-3 pl-1'
-            legacyBehavior>
-            <p className='text-sm font-semibold text-gray-500'>
-              จัดการโปรโมชั่น
-            </p>
+          <Link href={'/dashboard/promotion'} legacyBehavior>
+            <div className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-3 pl-1'>
+              <p className='text-sm font-semibold text-gray-500'>
+                จัดการโปรโมชั่น
+              </p>
+            </div>
           </Link>
-          <Link
-            href={'/dashboard/menu'}
-            className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-2 pl-1 border-b-2 border-brand'
-            legacyBehavior>
-            <p className='text-sm font-semibold text-brand'>จัดการเมนู</p>
+          <Link href={'/dashboard/menu'} legacyBehavior>
+            <div className='flex h-8 justify-center items-center gap-2 pt-0 pr-1 pb-2 pl-1 border-b-2 border-brand'>
+              <p className='text-sm font-semibold text-brand'>จัดการเมนู</p>
+            </div>
           </Link>
         </div>
       </div>
@@ -64,7 +64,8 @@ const MenuPage = async () => {
             <Link
               key={category.id}
               href={`/dashboard/menu/category/${category.id}`}
-              legacyBehavior>
+              legacyBehavior
+            >
               <CategoryCard name={category.name} imageUrl={category.image} />
             </Link>
           ))}
@@ -77,7 +78,7 @@ const MenuPage = async () => {
         </div>
       )}
     </main>
-  );
+  )
 }
 
 export default MenuPage

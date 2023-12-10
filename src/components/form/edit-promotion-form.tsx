@@ -17,16 +17,15 @@ import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { Icons } from '../icons'
 import toast from 'react-hot-toast'
-import { useUploadThing } from '../../lib/uploadthing'
 import { updatePromotion } from '../../lib/actions/promotion'
 import { useRouter } from 'next/navigation'
 import { Promotion } from '@prisma/client'
+import { useEdgeStore } from '@/lib/edgestore'
 
 const editPromotionSchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อโปรโมชั่น'),
   price: z.preprocess(x => Number(x), z.number()),
   description: z.string().optional(),
-  image: z.string().optional(),
 })
 
 type EditPromotionInput = z.infer<typeof editPromotionSchema>
@@ -37,7 +36,9 @@ type EditPromotionFormProps = {
 
 const EditPromotionForm = ({ promotion }: EditPromotionFormProps) => {
   const router = useRouter()
-  const [files, setFiles] = useState<File[]>([])
+  const [file, setFile] = useState<File>()
+  const [isLoading, setIsLoading] = useState(false)
+  const { edgestore } = useEdgeStore()
 
   const form = useForm<EditPromotionInput>({
     resolver: zodResolver(editPromotionSchema),
@@ -45,60 +46,68 @@ const EditPromotionForm = ({ promotion }: EditPromotionFormProps) => {
       name: promotion.name ?? '',
       price: promotion.price ?? undefined,
       description: promotion.description ?? undefined,
-      image: promotion.image ?? undefined,
-    },
-  })
-
-  const { startUpload, isUploading } = useUploadThing('imageUploader', {
-    onClientUploadComplete: () => {
-      toast.success('อัปโหลดรูปปกหมวดหมู่เรียบร้อยแล้ว')
-    },
-    onUploadError: e => {
-      toast.error('อัปโหลดรูปปกหมวดหมู่ไม่สำเร็จ')
-      console.log('Error: ', e)
     },
   })
 
   const onSubmit = async (data: EditPromotionInput) => {
-    if (!!files.length) {
-      await startUpload(files).then(res => {
-        console.log(res)
-        if (!res) return
-        form.setValue('image', res[0].url)
-      })
+    setIsLoading(true)
+    if (file) {
+      await edgestore.publicFiles
+        .upload({
+          file,
+          options: {
+            temporary: true,
+          },
+        })
+        .then(async res => {
+          await updatePromotion(
+            promotion.id,
+            data.name,
+            Number(data.price),
+            data.description,
+            res.url
+          )
+            .then(() => {
+              setIsLoading(false)
+              toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
+              router.push('/dashboard/promotion')
+              router.refresh()
+            })
+            .catch(e => {
+              toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
+              console.log('Error: ', e)
+            })
+        })
+    } else {
+      await updatePromotion(
+        promotion.id,
+        data.name,
+        Number(data.price),
+        data.description
+      )
+        .then(() => {
+          setIsLoading(false)
+          toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
+          router.push('/dashboard/promotion')
+          router.refresh()
+        })
+        .catch(e => {
+          toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
+          console.log('Error: ', e)
+        })
     }
-
-    await updatePromotion(
-      promotion.id,
-      data.name,
-      Number(data.price),
-      data.description,
-      data.image
-    )
-      .then(() => {
-        toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
-        router.push('/dashboard/promotion')
-        router.refresh()
-      })
-      .catch(e => {
-        toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
-        console.log('Error: ', e)
-      })
   }
 
   useEffect(() => {
-    if (!!files.length) {
+    if (file) {
       toast.success('เพิ่มรูปปกหมวดหมู่เรียบร้อยแล้ว')
       return
     }
-  }, [files])
+  }, [file])
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='w-full space-y-4'
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-4'>
         <FormField
           name='name'
           control={form.control}
@@ -171,7 +180,7 @@ const EditPromotionForm = ({ promotion }: EditPromotionFormProps) => {
                       id='fileUpload'
                       style={{ display: 'none' }}
                       onChange={e => {
-                        setFiles(e.target.files as unknown as File[])
+                        setFile(e.target.files?.[0] as File)
                       }}
                     />
                   </div>
@@ -186,10 +195,11 @@ const EditPromotionForm = ({ promotion }: EditPromotionFormProps) => {
             className='w-full text-red-700'
             variant={'outline'}
             type='button'
+            disabled={isLoading}
           >
             นำออก
           </Button>
-          <Button className='w-full' disabled={isUploading} type='submit'>
+          <Button className='w-full' type='submit' disabled={isLoading}>
             บันทึก
           </Button>
         </div>

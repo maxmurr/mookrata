@@ -18,13 +18,12 @@ import { Textarea } from '../ui/textarea'
 import { Icons } from '../icons'
 import { createProduct } from '../../lib/actions/product'
 import toast from 'react-hot-toast'
-import { useUploadThing } from '../../lib/uploadthing'
+import { useEdgeStore } from '@/lib/edgestore'
 
 const createProductSchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อสินค้า'),
   price: z.preprocess(x => Number(x), z.number()),
   description: z.string().optional(),
-  image: z.string().optional(),
 })
 
 type CreateProductInput = z.infer<typeof createProductSchema>
@@ -34,7 +33,9 @@ type CreateProductFormProps = {
 }
 
 const CreateProductForm = ({ categoryId }: CreateProductFormProps) => {
-  const [files, setFiles] = useState<File[]>([])
+  const [file, setFile] = useState<File>()
+  const [isLoading, setIsLoading] = useState(false)
+  const { edgestore } = useEdgeStore()
 
   const form = useForm<CreateProductInput>({
     resolver: zodResolver(createProductSchema),
@@ -43,52 +44,65 @@ const CreateProductForm = ({ categoryId }: CreateProductFormProps) => {
     },
   })
 
-  const { startUpload, isUploading } = useUploadThing('imageUploader', {
-    onClientUploadComplete: () => {
-      toast.success('อัปโหลดรูปปกหมวดหมู่เรียบร้อยแล้ว')
-    },
-    onUploadError: e => {
-      toast.error('อัปโหลดรูปปกหมวดหมู่ไม่สำเร็จ')
-      console.log('Error: ', e)
-    },
-  })
-
   const onSubmit = async (data: CreateProductInput) => {
-    if (!!files.length) {
-      console.log(files)
-      await startUpload(files).then(res => {
-        console.log(res)
-        if (!res) return
-        form.setValue('image', res[0].url)
-      })
-    }
-
-    await createProduct(
-      data.name,
-      Number(data.price),
-      data.description,
-      data.image,
-      categoryId
-    )
-      .then(() => {
-        toast.success('เพิ่มรายการอาหารเรียบร้อยแล้ว')
-        const escEvent = new KeyboardEvent('keydown', {
-          key: 'Escape',
+    setIsLoading(true)
+    if (file) {
+      await edgestore.publicFiles
+        .upload({
+          file,
+          options: {
+            temporary: true,
+          },
         })
-        document.dispatchEvent(escEvent)
-      })
-      .catch(e => {
-        toast.error('เพิ่มรายการอาหารไม่สำเร็จ')
-        console.log(e)
-      })
+        .then(async res => {
+          await createProduct(
+            data.name,
+            Number(data.price),
+            data.description,
+            categoryId,
+            res.url
+          )
+            .then(() => {
+              setIsLoading(false)
+              toast.success('เพิ่มรายการอาหารเรียบร้อยแล้ว')
+              const escEvent = new KeyboardEvent('keydown', {
+                key: 'Escape',
+              })
+              document.dispatchEvent(escEvent)
+            })
+            .catch(e => {
+              toast.error('เพิ่มรายการอาหารไม่สำเร็จ')
+              console.log(e)
+            })
+        })
+    } else {
+      await createProduct(
+        data.name,
+        Number(data.price),
+        data.description,
+        categoryId
+      )
+        .then(() => {
+          setIsLoading(false)
+          toast.success('เพิ่มรายการอาหารเรียบร้อยแล้ว')
+          const escEvent = new KeyboardEvent('keydown', {
+            key: 'Escape',
+          })
+          document.dispatchEvent(escEvent)
+        })
+        .catch(e => {
+          toast.error('เพิ่มรายการอาหารไม่สำเร็จ')
+          console.log(e)
+        })
+    }
   }
 
   useEffect(() => {
-    if (!!files.length) {
+    if (file) {
       toast.success('เพิ่มรูปปกหมวดหมู่เรียบร้อยแล้ว')
       return
     }
-  }, [files])
+  }, [file])
 
   return (
     <Form {...form}>
@@ -173,7 +187,7 @@ const CreateProductForm = ({ categoryId }: CreateProductFormProps) => {
                       id='fileUpload'
                       style={{ display: 'none' }}
                       onChange={e => {
-                        setFiles(e.target.files as unknown as File[])
+                        setFile(e.target.files?.[0] as File)
                       }}
                     />
                   </div>
@@ -184,7 +198,7 @@ const CreateProductForm = ({ categoryId }: CreateProductFormProps) => {
           </FormControl>
         </FormItem>
         <div className='flex w-full p-4 bg-background items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
-          <Button className='w-full' disabled={isUploading}>
+          <Button className='w-full' type='submit' disabled={isLoading}>
             เพิ่ม
           </Button>
         </div>

@@ -7,6 +7,8 @@ import { Button } from '../ui/button'
 import { Icons } from '../icons'
 import ProductItem from '../product-item'
 import { useCart } from '../../hooks/use-cart-hook'
+import Image from 'next/image'
+import { AspectRatio } from '../ui/aspect-ratio'
 
 type PromotionDrawerProps = {
   children: React.ReactNode
@@ -22,12 +24,16 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <div className='h-full flex flex-col justify-between pt-4'>
-          <div className='flex py-0 px-4 flex-col items-start gap-4'>
-            <img
-              src='/images/promotion.jpeg'
-              alt='promotion'
-              className='h-[360px] w-full rounded-lg object-cover'
-            />
+          <div className='flex py-0 px-4 flex-col items-start gap-4 h- justify-between'>
+            <AspectRatio ratio={16 / 9} className='w-full h-72'>
+              <Image
+                src='/images/promotion.jpeg'
+                alt='promotion'
+                fill
+                objectFit='cover'
+                className='rounded-lg '
+              />
+            </AspectRatio>
             <div className='flex items-center gap-4 pb-4 justify-between w-full border-b'>
               <p className='text-2xl font-semibold text-gray-900'>
                 {promotion.name}

@@ -2,6 +2,8 @@
 import { OrderStatus } from '@prisma/client'
 import React from 'react'
 import { getTranslationOrderStatus } from '../lib/utils'
+import Image from 'next/image'
+import { AspectRatio } from './ui/aspect-ratio'
 
 type ProductItemProps = {
   name: string
@@ -25,7 +27,7 @@ const ProductItem = ({
           {quantity}
         </div>
         <div className='flex flex-col items-start gap-2'>
-          <p className='text-base text-gray-900'>{name}</p>
+          <p className='text-base text-gray-900 whitespace-nowrap'>{name}</p>
           {isEdit && <p className='text-brand text-sm font-semibold'>แก้ไข</p>}
           {status && (
             <p
@@ -38,11 +40,17 @@ const ProductItem = ({
           )}
         </div>
       </div>
-      <img
-        src={imageUrl ? imageUrl : '/images/pork.png'}
-        alt='pork'
-        className='h-20 w-20 rounded-lg object-cover'
-      />
+      <div className='w-20 h-20'>
+        <AspectRatio ratio={16 / 9} className='h-20'>
+          <Image
+            src={imageUrl ? imageUrl : '/images/pork.png'}
+            alt='pork'
+            fill
+            objectFit='cover'
+            className='rounded-lg flex justify-end'
+          />
+        </AspectRatio>
+      </div>
     </div>
   )
 }

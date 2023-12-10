@@ -69,9 +69,11 @@ const TablePage = async ({ params }: TablePageProps) => {
             <p className='text-lg font-semibold text-gray-900'>เมนูแนะนำ</p>
             <Link
               href={`/${params.qrcode}/${params.tableId}/promotion`}
-              className='text-gray-600 flex items-center gap-2'
-              legacyBehavior>
-              ดูทั้งหมด <Icons.arrow_right className='w-5 h-5' />
+              legacyBehavior
+            >
+              <div className='text-gray-600 flex items-center gap-2'>
+                ดูทั้งหมด <Icons.arrow_right className='w-5 h-5' />
+              </div>
             </Link>
           </div>
           <div className='flex flex-row gap-4 pb-4 items-start overflow-x-auto overflow-y-hidden -mx-4 px-4 scroll-smooth snap-x'>
@@ -99,7 +101,8 @@ const TablePage = async ({ params }: TablePageProps) => {
             <Link
               href={`/${params.qrcode}/${params.tableId}/category/${category.id}`}
               key={category.id}
-              legacyBehavior>
+              legacyBehavior
+            >
               <CategoryCard name={category.name} imageUrl={category.image} />
             </Link>
           ))}
@@ -110,7 +113,7 @@ const TablePage = async ({ params }: TablePageProps) => {
         table={table}
       />
     </main>
-  );
+  )
 }
 
 export default TablePage

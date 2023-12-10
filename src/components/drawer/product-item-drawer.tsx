@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import React, { useEffect } from 'react'
@@ -12,6 +11,8 @@ import {
   upsertPromotionProductCart,
 } from '../../lib/actions/promotion'
 import toast from 'react-hot-toast'
+import Image from 'next/image'
+import { AspectRatio } from '../ui/aspect-ratio'
 
 type ProductItemDrawerProps = {
   children: React.ReactNode
@@ -62,12 +63,16 @@ const ProductItemDrawer = ({
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <div className='h-full flex flex-col justify-between pt-4'>
-          <div className='flex py-0 px-4 flex-col items-start gap-4'>
-            <img
-              src='/images/promotion.jpeg'
-              alt='promotion'
-              className='h-[360px] w-full rounded-lg object-cover'
-            />
+          <div className='flex py-0 px-4 flex-col items-start gap-4 h-96 justify-between'>
+            <AspectRatio ratio={16 / 9} className='w-full h-72'>
+              <Image
+                src='/images/pork.png'
+                alt='product image'
+                fill
+                objectFit='cover'
+                className='rounded-lg'
+              />
+            </AspectRatio>
             <div className='flex items-center gap-4 pb-2 justify-between w-full'>
               <p className='text-2xl font-semibold text-gray-900'>
                 {product.name}

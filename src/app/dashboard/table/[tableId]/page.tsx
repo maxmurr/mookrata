@@ -56,13 +56,15 @@ const TablePage = async ({ params }: TablePageProps) => {
   return (
     <main className='h-screen'>
       <div className='flex h-16 p-2 items-center justify-between gap-2 shrink-0 border-b w-full'>
-        <Link href={'/dashboard/table'} className='flex items-center' legacyBehavior>
-          <div className='flex p-[10px] justify-center items-center '>
-            <Icons.arrow_left className='w-5 h-5' />
+        <Link href={'/dashboard/table'} legacyBehavior>
+          <div className='flex items-center'>
+            <div className='flex p-[10px] justify-center items-center '>
+              <Icons.arrow_left className='w-5 h-5' />
+            </div>
+            <p className='text-gray-900 text-center text-xl font-semibold'>
+              {table.name}
+            </p>
           </div>
-          <p className='text-gray-900 text-center text-xl font-semibold'>
-            {table.name}
-          </p>
         </Link>
         {table.qrCode ? (
           <Link href={`/dashboard/qrcode/${table.id}`} legacyBehavior>
@@ -187,7 +189,11 @@ const TablePage = async ({ params }: TablePageProps) => {
             <p className='text-lg font-semibold text-gray-900 w-fit whitespace-nowrap'>
               รวม {calculateTotalOrderPrice().toFixed(2)} บาท
             </p>
-            <Link href={`/dashboard/billing/${table.id}`} className='w-full' legacyBehavior>
+            <Link
+              href={`/dashboard/billing/${table.id}`}
+              className='w-full'
+              legacyBehavior
+            >
               <Button className='w-full'>ชำระเงิน</Button>
             </Link>
           </div>
@@ -199,7 +205,7 @@ const TablePage = async ({ params }: TablePageProps) => {
         </section>
       )}
     </main>
-  );
+  )
 }
 
 export default TablePage

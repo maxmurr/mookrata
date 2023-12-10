@@ -3,6 +3,7 @@ import React from 'react'
 import { cn } from '../lib/utils'
 import Image from 'next/image'
 import { Button } from './ui/button'
+import { AspectRatio } from './ui/aspect-ratio'
 
 type MenuCardProps = {
   name: string
@@ -10,34 +11,30 @@ type MenuCardProps = {
   imageUrl?: string | null
   id?: number
   classNames?: string
-  width?: number
 }
 
-const MenuCard = ({
-  name,
-  price,
-  imageUrl,
-  id,
-  classNames,
-  width,
-}: MenuCardProps) => {
+const MenuCard = ({ name, price, imageUrl, id, classNames }: MenuCardProps) => {
   return (
     <div
       className={cn(
-        'flex flex-col items-start gap-1 min-w-[160px]',
+        'flex flex-col justify-between items-start gap-1 min-w-[160px] max-h-60 min-h-[230px]',
         classNames
       )}
     >
-      <Image
-        src={imageUrl ? imageUrl : '/images/promotion.jpeg'}
-        alt='promotion'
-        height={160}
-        width={width ? width : 160}
-        className='rounded-lg object-cover h-40'
-      />
-      <p className='text-gray-900 text-sm'>{name}</p>
-      <p className='text-gray-900 text-sm font-semibold'>{price} บาท</p>
-      {id && <p className='text-brand text-sm font-semibold'>แก้ไข</p>}
+      <AspectRatio ratio={16 / 9} className='h-40 w-full'>
+        <Image
+          src={imageUrl ? imageUrl : '/images/promotion.jpeg'}
+          alt='promotion'
+          fill
+          objectFit='cover'
+          className='rounded-lg object-cover h-40'
+        />
+      </AspectRatio>
+      <div className='flex flex-col gap-1'>
+        <p className='text-gray-900 text-sm'>{name}</p>
+        <p className='text-gray-900 text-sm font-semibold'>{price} บาท</p>
+        {id && <p className='text-brand text-sm font-semibold'>แก้ไข</p>}
+      </div>
     </div>
   )
 }

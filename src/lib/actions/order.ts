@@ -133,6 +133,7 @@ export const disconnectOrderFromTable = async (id: number) => {
     },
     data: {
       orders: undefined,
+      qrCode: undefined,
     },
   })
 

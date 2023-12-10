@@ -17,22 +17,23 @@ import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { Icons } from '../icons'
 import toast from 'react-hot-toast'
-import { useUploadThing } from '../../lib/uploadthing'
 import { createPromotion } from '../../lib/actions/promotion'
 import { useRouter } from 'next/navigation'
+import { useEdgeStore } from '@/lib/edgestore'
 
 const createPromotionSchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อโปรโมชั่น'),
   price: z.preprocess(x => Number(x), z.number()),
   description: z.string().optional(),
-  image: z.string().optional(),
 })
 
 type CreatePromotionInput = z.infer<typeof createPromotionSchema>
 
 const CreatePromotionForm = () => {
   const router = useRouter()
-  const [files, setFiles] = useState<File[]>([])
+  const [file, setFile] = useState<File>()
+  const [isLoading, setIsLoading] = useState(false)
+  const { edgestore } = useEdgeStore()
 
   const form = useForm<CreatePromotionInput>({
     resolver: zodResolver(createPromotionSchema),
@@ -41,49 +42,55 @@ const CreatePromotionForm = () => {
     },
   })
 
-  const { startUpload, isUploading } = useUploadThing('imageUploader', {
-    onClientUploadComplete: () => {
-      toast.success('อัปโหลดรูปปกหมวดหมู่เรียบร้อยแล้ว')
-    },
-    onUploadError: e => {
-      toast.error('อัปโหลดรูปปกหมวดหมู่ไม่สำเร็จ')
-      console.log('Error: ', e)
-    },
-  })
-
   const onSubmit = async (data: CreatePromotionInput) => {
-    if (!!files.length) {
-      console.log(files)
-      await startUpload(files).then(res => {
-        console.log(res)
-        if (!res) return
-        form.setValue('image', res[0].url)
-      })
+    setIsLoading(true)
+    if (file) {
+      await edgestore.publicFiles
+        .upload({
+          file,
+          options: {
+            temporary: true,
+          },
+        })
+        .then(async res => {
+          await createPromotion(
+            data.name,
+            Number(data.price),
+            data.description,
+            res.url
+          )
+            .then(() => {
+              setIsLoading(false)
+              toast.success('เพิ่มโปรโมชั่นเรียบร้อยแล้ว')
+              router.push('/dashboard/promotion')
+              router.refresh()
+            })
+            .catch(e => {
+              toast.error('เพิ่มโปรโมชั่นไม่สำเร็จ')
+              console.log('Error: ', e)
+            })
+        })
+    } else {
+      await createPromotion(data.name, Number(data.price), data.description)
+        .then(() => {
+          setIsLoading(false)
+          toast.success('เพิ่มโปรโมชั่นเรียบร้อยแล้ว')
+          router.push('/dashboard/promotion')
+          router.refresh()
+        })
+        .catch(e => {
+          toast.error('เพิ่มโปรโมชั่นไม่สำเร็จ')
+          console.log('Error: ', e)
+        })
     }
-
-    await createPromotion(
-      data.name,
-      Number(data.price),
-      data.description,
-      data.image
-    )
-      .then(() => {
-        toast.success('เพิ่มโปรโมชั่นเรียบร้อยแล้ว')
-        router.push('/dashboard/promotion')
-        router.refresh()
-      })
-      .catch(e => {
-        toast.error('เพิ่มโปรโมชั่นไม่สำเร็จ')
-        console.log('Error: ', e)
-      })
   }
 
   useEffect(() => {
-    if (!!files.length) {
+    if (file) {
       toast.success('เพิ่มรูปปกหมวดหมู่เรียบร้อยแล้ว')
       return
     }
-  }, [files])
+  }, [file])
 
   return (
     <Form {...form}>
@@ -160,7 +167,7 @@ const CreatePromotionForm = () => {
                       id='fileUpload'
                       style={{ display: 'none' }}
                       onChange={e => {
-                        setFiles(e.target.files as unknown as File[])
+                        setFile(e.target.files?.[0] as File)
                       }}
                     />
                   </div>
@@ -171,7 +178,7 @@ const CreatePromotionForm = () => {
           </FormControl>
         </FormItem>
         <div className='flex w-full p-4 bg-background items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
-          <Button className='w-full' disabled={isUploading}>
+          <Button className='w-full' type='submit' disabled={isLoading}>
             เพิ่ม
           </Button>
         </div>

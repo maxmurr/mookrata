@@ -17,20 +17,22 @@ const CreateCategoryPage = async () => {
   return (
     <main>
       <div className='flex h-16 p-2 items-center justify-between gap-2 shrink-0 border-b w-full'>
-        <Link href={`/dashboard/menu`} className='flex items-center' legacyBehavior>
-          <div className='flex p-[10px] justify-center items-center '>
-            <Icons.arrow_left className='w-5 h-5' />
+        <Link href={`/dashboard/menu`} legacyBehavior>
+          <div className='flex items-center'>
+            <div className='flex p-[10px] justify-center items-center '>
+              <Icons.arrow_left className='w-5 h-5' />
+            </div>
+            <p className='text-gray-900 text-center text-xl font-semibold'>
+              เพิ่มหมวดหมู่
+            </p>
           </div>
-          <p className='text-gray-900 text-center text-xl font-semibold'>
-            เพิ่มหมวดหมู่
-          </p>
         </Link>
       </div>
       <section className='flex p-4 flex-col justify-center items-start gap-4 flex-1 h-full'>
         <CreateCategoryForm />
       </section>
     </main>
-  );
+  )
 }
 
 export default CreateCategoryPage

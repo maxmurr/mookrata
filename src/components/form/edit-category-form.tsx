@@ -8,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form'
 import { Input } from '../ui/input'
 import { Icons } from '../icons'
-import { useUploadThing } from '../../lib/uploadthing'
 import toast from 'react-hot-toast'
 import {
   createCategory,
@@ -18,10 +17,10 @@ import {
 import { useRouter } from 'next/navigation'
 import { Category } from '@prisma/client'
 import DeleteCategoryDrawer from '../drawer/delete-category-drawer'
+import { useEdgeStore } from '@/lib/edgestore'
 
 const editCategorySchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อหมวดหมู่'),
-  image: z.string().optional(),
 })
 
 type EditCategoryInput = z.infer<typeof editCategorySchema>
@@ -32,54 +31,61 @@ type EditCategoryFormProps = {
 
 const EditCategoryForm = ({ category }: EditCategoryFormProps) => {
   const router = useRouter()
-  const [files, setFiles] = useState<File[]>([])
+  const [file, setFile] = useState<File>()
+  const [isLoading, setIsLoading] = useState(false)
+  const { edgestore } = useEdgeStore()
 
   const form = useForm<EditCategoryInput>({
     resolver: zodResolver(editCategorySchema),
     defaultValues: {
       name: category.name,
-      image: category.image ?? undefined,
-    },
-  })
-
-  const { startUpload, isUploading } = useUploadThing('imageUploader', {
-    onClientUploadComplete: () => {
-      toast.success('อัปโหลดรูปปกหมวดหมู่เรียบร้อยแล้ว')
-    },
-    onUploadError: e => {
-      toast.error('อัปโหลดรูปปกหมวดหมู่ไม่สำเร็จ')
-      console.log('Error: ', e)
     },
   })
 
   const onSubmit = async (data: EditCategoryInput) => {
-    if (!!files.length) {
-      console.log(files)
-      await startUpload(files).then(res => {
-        console.log(res)
-        if (!res) return
-        form.setValue('image', res[0].url)
-      })
+    setIsLoading(true)
+    if (file) {
+      await edgestore.publicFiles
+        .upload({
+          file,
+          options: {
+            temporary: true,
+          },
+        })
+        .then(async res => {
+          await updateCategory(category.id, data.name, res.url)
+            .then(() => {
+              setIsLoading(false)
+              toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
+              router.push('/dashboard/menu')
+              router.refresh()
+            })
+            .catch(e => {
+              toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
+              console.log(e)
+            })
+        })
+    } else {
+      await updateCategory(category.id, data.name)
+        .then(() => {
+          setIsLoading(false)
+          toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
+          router.push('/dashboard/menu')
+          router.refresh()
+        })
+        .catch(e => {
+          toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
+          console.log(e)
+        })
     }
-
-    await updateCategory(category.id, data.name, data.image)
-      .then(() => {
-        toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
-        router.push('/dashboard/menu')
-        router.refresh()
-      })
-      .catch(e => {
-        toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
-        console.log(e)
-      })
   }
 
   useEffect(() => {
-    if (!!files.length) {
+    if (file) {
       toast.success('เพิ่มรูปปกหมวดหมู่เรียบร้อยแล้ว')
       return
     }
-  }, [files])
+  }, [file])
 
   return (
     <Form {...form}>
@@ -126,7 +132,7 @@ const EditCategoryForm = ({ category }: EditCategoryFormProps) => {
                       id='fileUpload'
                       style={{ display: 'none' }}
                       onChange={e => {
-                        setFiles(e.target.files as unknown as File[])
+                        setFile(e.target.files?.[0] as File)
                       }}
                     />
                   </div>
@@ -142,11 +148,12 @@ const EditCategoryForm = ({ category }: EditCategoryFormProps) => {
               className='w-full text-red-700'
               variant={'outline'}
               type='button'
+              disabled={isLoading}
             >
               ลบ
             </Button>
           </DeleteCategoryDrawer>
-          <Button className='w-full' disabled={isUploading} type='submit'>
+          <Button className='w-full' type='submit' disabled={isLoading}>
             บันทึก
           </Button>
         </div>

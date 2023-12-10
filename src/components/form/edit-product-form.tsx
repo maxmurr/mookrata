@@ -20,13 +20,12 @@ import { createProduct, updateProduct } from '../../lib/actions/product'
 import toast from 'react-hot-toast'
 import { Product } from '@prisma/client'
 import DeleteProductDrawer from '../drawer/delete-product-drawer'
-import { useUploadThing } from '../../lib/uploadthing'
+import { useEdgeStore } from '@/lib/edgestore'
 
 const editProductSchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อสินค้า'),
   price: z.preprocess(x => Number(x), z.number()),
   description: z.string().optional(),
-  image: z.string().optional(),
 })
 
 type EditProductInput = z.infer<typeof editProductSchema>
@@ -37,7 +36,9 @@ type EditProductFormProps = {
 }
 
 const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
-  const [files, setFiles] = useState<File[]>([])
+  const [file, setFile] = useState<File>()
+  const [isLoading, setIsLoading] = useState(false)
+  const { edgestore } = useEdgeStore()
 
   const form = useForm<EditProductInput>({
     resolver: zodResolver(editProductSchema),
@@ -48,53 +49,69 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
     },
   })
 
-  const { startUpload, isUploading } = useUploadThing('imageUploader', {
-    onClientUploadComplete: () => {
-      toast.success('อัปโหลดรูปปกหมวดหมู่เรียบร้อยแล้ว')
-    },
-    onUploadError: e => {
-      toast.error('อัปโหลดรูปปกหมวดหมู่ไม่สำเร็จ')
-      console.log('Error: ', e)
-    },
-  })
-
   const onSubmit = async (data: EditProductInput) => {
-    if (!!files.length) {
-      console.log(files)
-      await startUpload(files).then(res => {
-        console.log(res)
-        if (!res) return
-        form.setValue('image', res[0].url)
-      })
-    }
-
-    await updateProduct(
-      data.name,
-      Number(data.price),
-      data.description,
-      data.image,
-      product.id,
-      categoryId
-    )
-      .then(() => {
-        toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
-        const escEvent = new KeyboardEvent('keydown', {
-          key: 'Escape',
+    setIsLoading(true)
+    if (file) {
+      console.log(file)
+      await edgestore.publicFiles
+        .upload({
+          file,
+          options: {
+            temporary: true,
+          },
         })
-        document.dispatchEvent(escEvent)
-      })
-      .catch(e => {
-        toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
-        console.log(e)
-      })
+        .then(async res => {
+          await updateProduct(
+            data.name,
+            Number(data.price),
+            data.description,
+            product.id,
+            categoryId,
+            res.url
+          )
+            .then(() => {
+              setIsLoading(false)
+              toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
+              const escEvent = new KeyboardEvent('keydown', {
+                key: 'Escape',
+              })
+              document.dispatchEvent(escEvent)
+            })
+            .catch(e => {
+              toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
+              console.log(e)
+            })
+        })
+    } else {
+      await updateProduct(
+        data.name,
+        Number(data.price),
+        data.description,
+        product.id,
+        categoryId
+      )
+        .then(() => {
+          setIsLoading(false)
+          toast.success('บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว')
+          const escEvent = new KeyboardEvent('keydown', {
+            key: 'Escape',
+          })
+          document.dispatchEvent(escEvent)
+        })
+        .catch(e => {
+          toast.error('บันทึกการเปลี่ยนแปลงไม่สำเร็จ')
+          console.log(e)
+        })
+    }
   }
 
   useEffect(() => {
-    if (!!files.length) {
+    console.log(file)
+    if (file) {
       toast.success('เพิ่มรูปปกหมวดหมู่เรียบร้อยแล้ว')
       return
     }
-  }, [files])
+  }, [file])
 
   return (
     <Form {...form}>
@@ -102,7 +119,7 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className='flex py-0 px-4 flex-col items-start gap-4 flex-1 pt-4'
       >
-        <p className='text-gray-900 text-lg font-semibold'>เพิ่มรายการอาหาร</p>
+        <p className='text-gray-900 text-lg font-semibold'>แก้รายการอาหาร</p>
         <FormField
           name='name'
           control={form.control}
@@ -179,7 +196,8 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
                       id='fileUpload'
                       style={{ display: 'none' }}
                       onChange={e => {
-                        setFiles(e.target.files as unknown as File[])
+                        console.log(e.target)
+                        setFile(e.target.files?.[0] as File)
                       }}
                     />
                   </div>
@@ -195,11 +213,12 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
               className='w-full text-red-700'
               variant={'outline'}
               type='button'
+              disabled={isLoading}
             >
               ลบ
             </Button>
           </DeleteProductDrawer>
-          <Button className='w-full' disabled={isUploading} type='submit'>
+          <Button className='w-full' type='submit' disabled={isLoading}>
             บันทึก
           </Button>
         </div>

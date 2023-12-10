@@ -33,27 +33,22 @@ const PromotionPage = async ({ params }: PromotionPageProps) => {
   return (
     <main>
       <div className='flex h-16 p-2 items-center gap-2 shrink-0 border-b'>
-        <Link
-          href={`/${params.qrcode}/${params.tableId}/table`}
-          className='flex items-center'
-          legacyBehavior>
-          <div className='flex p-[10px] justify-center items-center '>
-            <Icons.arrow_left className='w-5 h-5' />
+        <Link href={`/${params.qrcode}/${params.tableId}/table`} legacyBehavior>
+          <div className='flex items-center'>
+            <div className='flex p-[10px] justify-center items-center '>
+              <Icons.arrow_left className='w-5 h-5' />
+            </div>
+            <p className='text-gray-900 text-center text-xl font-semibold'>
+              โปรโมชัน
+            </p>
           </div>
-          <p className='text-gray-900 text-center text-xl font-semibold'>
-            โปรโมชัน
-          </p>
         </Link>
       </div>
       <section className='container mx-auto p-4 flex-col items-start space-y-4 flex-1'>
         <div className='grid grid-cols-2 items-start gap-4 w-full'>
           {promotions.map(promotion => (
             <PromotionDrawer key={promotion.id} promotion={promotion}>
-              <MenuCard
-                name={promotion.name}
-                price={promotion.price}
-                width={173}
-              />
+              <MenuCard name={promotion.name} price={promotion.price} />
             </PromotionDrawer>
           ))}
         </div>
@@ -63,7 +58,7 @@ const PromotionPage = async ({ params }: PromotionPageProps) => {
         table={table as unknown as Table}
       />
     </main>
-  );
+  )
 }
 
 export default PromotionPage

@@ -8,8 +8,8 @@ export const createProduct = async (
   name: string,
   price: number,
   description: string | undefined,
-  image: string | undefined,
-  categoryId: number
+  categoryId: number,
+  image?: string | undefined
 ) => {
   const session = await getServerAuthSession()
 
@@ -34,9 +34,9 @@ export const updateProduct = async (
   name: string,
   price: number,
   description: string | undefined,
-  image: string | undefined,
   productId: number,
-  categoryId: number
+  categoryId: number,
+  image?: string | undefined
 ) => {
   const session = await getServerAuthSession()
 

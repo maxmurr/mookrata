@@ -3,15 +3,15 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from '../ui/button'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { set, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form'
 import { Input } from '../ui/input'
 import { Icons } from '../icons'
-import { useUploadThing } from '../../lib/uploadthing'
 import toast from 'react-hot-toast'
 import { createCategory } from '../../lib/actions/category'
 import { useRouter } from 'next/navigation'
+import { useEdgeStore } from '@/lib/edgestore'
 
 const createCategorySchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อหมวดหมู่'),
@@ -22,7 +22,9 @@ type CreateCategoryInput = z.infer<typeof createCategorySchema>
 
 const CreateCategoryForm = () => {
   const router = useRouter()
-  const [files, setFiles] = useState<File[]>([])
+  const [file, setFile] = useState<File>()
+  const [isLoading, setIsLoading] = useState(false)
+  const { edgestore } = useEdgeStore()
 
   const form = useForm<CreateCategoryInput>({
     resolver: zodResolver(createCategorySchema),
@@ -31,44 +33,50 @@ const CreateCategoryForm = () => {
     },
   })
 
-  const { startUpload, isUploading } = useUploadThing('imageUploader', {
-    onClientUploadComplete: () => {
-      toast.success('อัปโหลดรูปปกหมวดหมู่เรียบร้อยแล้ว')
-    },
-    onUploadError: e => {
-      toast.error('อัปโหลดรูปปกหมวดหมู่ไม่สำเร็จ')
-      console.log('Error: ', e)
-    },
-  })
-
   const onSubmit = async (data: CreateCategoryInput) => {
-    if (!!files.length) {
-      console.log(files)
-      await startUpload(files).then(res => {
-        console.log(res)
-        if (!res) return
-        form.setValue('image', res[0].url)
-      })
+    setIsLoading(true)
+    if (file) {
+      await edgestore.publicFiles
+        .upload({
+          file,
+          options: {
+            temporary: true,
+          },
+        })
+        .then(async res => {
+          await createCategory(data.name, res.url)
+            .then(() => {
+              setIsLoading(false)
+              toast.success('เพิ่มหมวดหมู่เรียบร้อยแล้ว')
+              router.push('/dashboard/menu')
+              router.refresh()
+            })
+            .catch(e => {
+              toast.error('เพิ่มหมวดหมู่ไม่สำเร็จ')
+              console.log(e)
+            })
+        })
+    } else {
+      await createCategory(data.name)
+        .then(() => {
+          setIsLoading(false)
+          toast.success('เพิ่มหมวดหมู่เรียบร้อยแล้ว')
+          router.push('/dashboard/menu')
+          router.refresh()
+        })
+        .catch(e => {
+          toast.error('เพิ่มหมวดหมู่ไม่สำเร็จ')
+          console.log(e)
+        })
     }
-
-    await createCategory(data.name, data.image)
-      .then(() => {
-        toast.success('เพิ่มหมวดหมู่เรียบร้อยแล้ว')
-        router.push('/dashboard/menu')
-        router.refresh()
-      })
-      .catch(e => {
-        toast.error('เพิ่มหมวดหมู่ไม่สำเร็จ')
-        console.log(e)
-      })
   }
 
   useEffect(() => {
-    if (!!files.length) {
+    if (file) {
       toast.success('เพิ่มรูปปกหมวดหมู่เรียบร้อยแล้ว')
       return
     }
-  }, [files])
+  }, [file])
 
   return (
     <Form {...form}>
@@ -115,7 +123,7 @@ const CreateCategoryForm = () => {
                       id='fileUpload'
                       style={{ display: 'none' }}
                       onChange={e => {
-                        setFiles(e.target.files as unknown as File[])
+                        setFile(e.target.files?.[0] as File)
                       }}
                     />
                   </div>
@@ -126,7 +134,7 @@ const CreateCategoryForm = () => {
           </FormControl>
         </FormItem>
         <div className='flex w-full p-4 bg-background items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
-          <Button className='w-full' disabled={isUploading}>
+          <Button className='w-full' type='submit' disabled={isLoading}>
             เพิ่ม
           </Button>
         </div>

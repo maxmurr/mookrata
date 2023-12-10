@@ -4,10 +4,8 @@ import { Anuphan } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 
 import './globals.css'
-import { extractRouterConfig } from 'uploadthing/server'
-import { ourFileRouter } from './api/uploadthing/core'
-import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 import { Provider as JotaiProvider } from 'jotai'
+import { EdgeStoreProvider } from '../lib/edgestore'
 
 const anuphan = Anuphan({ subsets: ['thai'] })
 
@@ -25,9 +23,10 @@ export default function RootLayout({
     <html lang='th'>
       <head />
       <body className={anuphan.className}>
-        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Toaster position='bottom-center' />
-        <JotaiProvider>{children}</JotaiProvider>
+        <EdgeStoreProvider>
+          <JotaiProvider>{children}</JotaiProvider>
+        </EdgeStoreProvider>
       </body>
     </html>
   )

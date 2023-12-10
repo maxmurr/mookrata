@@ -36,14 +36,16 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       <div className='flex h-16 p-2 items-center justify-between gap-2 shrink-0 border-b w-full'>
         <Link
           href={`/dashboard/promotion/${params.id}/category`}
-          className='flex items-center'
-          legacyBehavior>
-          <div className='flex p-[10px] justify-center items-center '>
-            <Icons.arrow_left className='w-5 h-5' />
+          legacyBehavior
+        >
+          <div className='flex items-center'>
+            <div className='flex p-[10px] justify-center items-center '>
+              <Icons.arrow_left className='w-5 h-5' />
+            </div>
+            <p className='text-gray-900 text-center text-xl font-semibold'>
+              {category?.name}
+            </p>
           </div>
-          <p className='text-gray-900 text-center text-xl font-semibold'>
-            {category?.name}
-          </p>
         </Link>
       </div>
       {!!category?.products.length ? (
@@ -72,7 +74,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         </div>
       )}
     </main>
-  );
+  )
 }
 
 export default ProductPage

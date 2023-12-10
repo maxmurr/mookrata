@@ -56,16 +56,15 @@ const OrderPage = async ({ params }: OrderPageProps) => {
   return (
     <main>
       <div className='flex h-16 p-2 items-center gap-2 shrink-0 border-b'>
-        <Link
-          href={`/${params.qrcode}/${params.tableId}/table`}
-          className='flex items-center'
-          legacyBehavior>
-          <div className='flex p-[10px] justify-center items-center '>
-            <Icons.arrow_left className='w-5 h-5' />
+        <Link href={`/${params.qrcode}/${params.tableId}/table`} legacyBehavior>
+          <div className='flex items-center'>
+            <div className='flex p-[10px] justify-center items-center '>
+              <Icons.arrow_left className='w-5 h-5' />
+            </div>
+            <p className='text-gray-900 text-center text-xl font-semibold'>
+              รายการอาหาร
+            </p>
           </div>
-          <p className='text-gray-900 text-center text-xl font-semibold'>
-            รายการอาหาร
-          </p>
         </Link>
       </div>
       <section className='container mx-auto p-4 flex flex-col items-center justify-center space-y-4 flex-1'>
@@ -82,15 +81,7 @@ const OrderPage = async ({ params }: OrderPageProps) => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value='ordering' className='w-full'>
-            {!!table?.orders.length ? (
-              <CartList tableId={Number(table.id)} qrCode={params.qrcode} />
-            ) : (
-              <div className='m-auto flex justify-center items-center h-screen'>
-                <p className='text-base font-medium text-gray-500'>
-                  ยังไม่มีรายการที่รอสั่ง
-                </p>
-              </div>
-            )}
+            <CartList tableId={Number(params.tableId)} qrCode={params.qrcode} />
           </TabsContent>
           <TabsContent value='ordered' className='w-full'>
             <ScrollArea className='w-full max-h-[700px] overflow-y-auto'>
@@ -143,7 +134,7 @@ const OrderPage = async ({ params }: OrderPageProps) => {
         </Tabs>
       </section>
     </main>
-  );
+  )
 }
 
 export default OrderPage
