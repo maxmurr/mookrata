@@ -21,15 +21,11 @@ export const getCategories = async () => {
 }
 
 export const createCategory = async (name: string, image?: string) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const category = await db.category.create({
     data: {
       name,
       image: image ?? null,
-      userId: Number(session.user.id),
+      userId: 1,
     },
   })
 
@@ -64,10 +60,6 @@ export const updateCategory = async (
   name: string,
   image?: string
 ) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const category = await db.category.update({
     where: {
       id,
@@ -83,10 +75,6 @@ export const updateCategory = async (
 }
 
 export const deleteCategory = async (id: number) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const category = await db.category.delete({
     where: {
       id,

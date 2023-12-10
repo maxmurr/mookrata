@@ -5,10 +5,6 @@ import { db } from '../../server/db'
 import { getServerAuthSession } from '../../server/auth'
 
 export const getTables = async () => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const tables = await db.table.findMany({
     include: {
       orders: true,
@@ -55,13 +51,10 @@ export const getTableById = async (id: number) => {
 }
 
 export const createTable = async (name: string) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const table = await db.table.create({
     data: {
       name,
+      userId: 1,
     },
   })
 
@@ -70,10 +63,6 @@ export const createTable = async (name: string) => {
 }
 
 export const updateTable = async (id: number, name: string) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const table = await db.table.update({
     where: {
       id,
@@ -88,10 +77,6 @@ export const updateTable = async (id: number, name: string) => {
 }
 
 export const deleteTable = async (id: number) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const table = await db.table.delete({
     where: {
       id,
@@ -103,10 +88,6 @@ export const deleteTable = async (id: number) => {
 }
 
 export const addQrCode = async (id: number, qrCode: string) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const table = await db.table.update({
     where: {
       id,

@@ -25,10 +25,6 @@ export const getPromotions = async () => {
 }
 
 export const getPromotionById = async (id: number) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const promotion = await db.promotion.findUnique({
     where: {
       id,
@@ -56,17 +52,13 @@ export const createPromotion = async (
   description: string | undefined,
   image?: string | undefined
 ) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const promotion = await db.promotion.create({
     data: {
       name,
       price,
       description,
       image: image ?? null,
-      userId: Number(session.user.id),
+      userId: 1,
     },
   })
 
@@ -81,10 +73,6 @@ export const updatePromotion = async (
   description: string | undefined,
   image?: string | undefined
 ) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const promotion = await db.promotion.update({
     where: {
       id,
@@ -105,10 +93,6 @@ export const upsertPromotionProductCart = async (
   id: number,
   productCarts: ProductCart[]
 ) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const promotion = await db.promotion.findUnique({
     where: {
       id,
@@ -206,10 +190,6 @@ export const deletePromotionProductCartProductItem = async (
   id: number,
   productCartItemId: number
 ) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const promotion = await db.promotion.findUnique({
     where: {
       id,

@@ -11,10 +11,6 @@ export const createProduct = async (
   categoryId: number,
   image?: string | undefined
 ) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const product = await db.product.create({
     data: {
       name,
@@ -22,7 +18,7 @@ export const createProduct = async (
       description,
       image,
       categoryId,
-      userId: Number(session.user.id),
+      userId: 1,
     },
   })
 
@@ -38,10 +34,6 @@ export const updateProduct = async (
   categoryId: number,
   image?: string | undefined
 ) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const product = await db.product.update({
     where: {
       id: productId,
@@ -59,10 +51,6 @@ export const updateProduct = async (
 }
 
 export const deleteProduct = async (productId: number, categoryId: number) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const product = await db.product.delete({
     where: {
       id: productId,

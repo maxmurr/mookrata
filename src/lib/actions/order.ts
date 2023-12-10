@@ -11,10 +11,6 @@ export const createOrder = async (
   promotionCart?: PromotionCart[],
   productCart?: ProductCart[]
 ) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const createdOrder = await db.order.create({
     data: {
       table: {
@@ -88,10 +84,6 @@ export const createOrder = async (
 }
 
 export const updateOrderStatus = async (id: number, status: OrderStatus) => {
-  const session = await getServerAuthSession()
-
-  if (!session) throw new Error('Unauthorized')
-
   const order = await db.order.update({
     where: {
       id,
