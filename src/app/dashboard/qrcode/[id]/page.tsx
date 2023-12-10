@@ -41,7 +41,7 @@ const QrcodePage = async ({ params }: QrcodePageProps) => {
       </div>
       <section className='flex p-4 flex-col justify-center items-center gap-4 flex-1 h-full'>
         <QRCode
-          value={`http://localhost:3000/${table.qrCode}/${table.id}/table`}
+          value={`https://mookrata.vercel.app/${table.qrCode}/${table.id}/table`}
         />
         <p className='text-xl font-semibold'>แสกนเพื่อสั่งอาหาร</p>
       </section>
