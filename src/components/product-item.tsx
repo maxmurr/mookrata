@@ -48,6 +48,7 @@ const ProductItem = ({
             fill
             objectFit='cover'
             className='rounded-lg flex justify-end'
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           />
         </AspectRatio>
       </div>

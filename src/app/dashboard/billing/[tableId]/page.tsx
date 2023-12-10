@@ -7,6 +7,7 @@ import { notFound, redirect } from 'next/navigation'
 import { getTableById } from '../../../../lib/actions/table'
 import Link from 'next/link'
 import PayButton from '../../../../components/pay-button'
+import { AspectRatio } from '../../../../components/ui/aspect-ratio'
 
 type BillingPageProps = {
   params: {
@@ -58,14 +59,19 @@ const BillingPage = async ({ params }: BillingPageProps) => {
         </Link>
       </div>
       <section className='flex p-4 flex-col justify-center items-center gap-4 flex-1 h-full'>
+        <AspectRatio ratio={16 / 9}>
+          <Image
+            src='/images/prompt_pay.png'
+            width={160}
+            height={53}
+            alt='prompt-pay'
+            
+          />
+        </AspectRatio>
         <Image
-          src='/images/prompt_pay.png'
-          width={160}
-          height={53}
-          alt='prompt-pay'
-        />
-        <Image
-          src={`https://promptpay.io/0646504306/${calculateTotalOrderPrice().toFixed(2)}.png`}
+          src={`https://promptpay.io/0646504306/${calculateTotalOrderPrice().toFixed(
+            2
+          )}.png`}
           alt='prompt-pay'
           width={240}
           height={240}

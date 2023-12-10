@@ -28,6 +28,7 @@ const MenuCard = ({ name, price, imageUrl, id, classNames }: MenuCardProps) => {
           fill
           objectFit='cover'
           className='rounded-lg object-cover h-40'
+          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
         />
       </AspectRatio>
       <div className='flex flex-col gap-1'>

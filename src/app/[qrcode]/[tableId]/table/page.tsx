@@ -14,6 +14,7 @@ import { getTableById } from '../../../../lib/actions/table'
 import CartNotification from '../../../../components/cart-notification'
 import PromotionDrawer from '../../../../components/drawer/promotion-drawer'
 import { Promotion } from '@prisma/client'
+import { AspectRatio } from '../../../../components/ui/aspect-ratio'
 
 type TablePageProps = {
   params: {
@@ -56,7 +57,7 @@ const TablePage = async ({ params }: TablePageProps) => {
           alt='logo'
           width={0}
           height={0}
-          sizes='100vw'
+          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           className='w-full h-auto'
         />
       </div>
