@@ -52,7 +52,6 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
   const onSubmit = async (data: EditProductInput) => {
     setIsLoading(true)
     if (file) {
-      console.log(file)
       await edgestore.publicFiles
         .upload({
           file,
@@ -106,7 +105,6 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
   }
 
   useEffect(() => {
-    console.log(file)
     if (file) {
       toast.success('เพิ่มรูปปกหมวดหมู่เรียบร้อยแล้ว')
       return
@@ -178,7 +176,7 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
           <FormLabel>อัปโหลดรูปปก</FormLabel>
           <FormControl>
             <label
-              htmlFor='fileUpload'
+              htmlFor='uploadFile'
               className='flex flex-col items-center gap-1 self-stretch rounded-[.75rem] border bg-white px-6 py-4'
             >
               <div className='flex flex-col items-center gap-[.75rem] self-stretch'>
@@ -193,7 +191,7 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
                     <Input
                       type='file'
                       hidden
-                      id='fileUpload'
+                      id='uploadFile'
                       style={{ display: 'none' }}
                       onChange={e => {
                         console.log(e.target)
