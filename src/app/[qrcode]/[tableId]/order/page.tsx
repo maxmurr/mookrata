@@ -83,7 +83,7 @@ const OrderPage = async ({ params }: OrderPageProps) => {
           <TabsContent value='ordering' className='w-full'>
             <CartList tableId={Number(params.tableId)} qrCode={params.qrcode} />
           </TabsContent>
-          <TabsContent value='ordered' className='w-full'>
+          <TabsContent value='ordered' className='w-full gap-4'>
             <ScrollArea className='w-full max-h-[700px] overflow-y-auto'>
               {!!table?.orders.length ? (
                 <>
@@ -110,6 +110,7 @@ const OrderPage = async ({ params }: OrderPageProps) => {
                             key={`${orderIndex}-${itemIndex}`}
                             name={item.promotion.name}
                             quantity={item.quantity}
+                            imageUrl={item.promotion.image}
                             status={order.status}
                           />
                         )

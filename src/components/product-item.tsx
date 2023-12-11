@@ -21,7 +21,7 @@ const ProductItem = ({
   status,
 }: ProductItemProps) => {
   return (
-    <div className='flex h-20 justify-between items-start w-full'>
+    <div className='flex h-20 justify-between items-start w-full mb-4'>
       <div className='flex items-start gap-4'>
         <div className='flex py-[2px] px-[9px] justify-center items-center rounded-[4px] border border-gray-200'>
           {quantity}

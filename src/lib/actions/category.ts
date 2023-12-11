@@ -59,18 +59,32 @@ export const updateCategory = async (
   name: string,
   image?: string
 ) => {
-  const category = await db.category.update({
-    where: {
-      id,
-    },
-    data: {
-      name,
-      image: image ?? null,
-    },
-  })
+  if (image) {
+    const category = await db.category.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        image: image ?? null,
+      },
+    })
 
-  revalidatePath('/dashboard/menu')
-  return category
+    revalidatePath('/dashboard/menu')
+    return category
+  } else {
+    const category = await db.category.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+      },
+    })
+
+    revalidatePath('/dashboard/menu')
+    return category
+  }
 }
 
 export const deleteCategory = async (id: number) => {

@@ -83,20 +83,35 @@ export const updatePromotion = async (
   description: string | undefined,
   image?: string | undefined
 ) => {
-  const promotion = await db.promotion.update({
-    where: {
-      id,
-    },
-    data: {
-      name,
-      price,
-      description,
-      image: image ?? null,
-    },
-  })
+  if (image) {
+    const promotion = await db.promotion.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        price,
+        description,
+        image: image,
+      },
+    })
+    revalidatePath(`/dashboard/promotion`)
+    return promotion
+  } else {
+    const promotion = await db.promotion.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        price,
+        description,
+      },
+    })
 
-  revalidatePath(`/dashboard/promotion`)
-  return promotion
+    revalidatePath(`/dashboard/promotion`)
+    return promotion
+  }
 }
 
 export const upsertPromotionProductCart = async (

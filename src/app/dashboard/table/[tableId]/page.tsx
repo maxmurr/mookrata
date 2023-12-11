@@ -54,7 +54,7 @@ const TablePage = async ({ params }: TablePageProps) => {
   }
 
   return (
-    <main className='h-screen'>
+    <main className='h-screen mb-8'>
       <div className='flex h-16 p-2 items-center justify-between gap-2 shrink-0 border-b w-full'>
         <Link href={'/dashboard/table'} legacyBehavior>
           <div className='flex items-center'>
@@ -185,7 +185,7 @@ const TablePage = async ({ params }: TablePageProps) => {
               )}
             </div>
           ))}
-          <div className='flex w-full p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
+          <div className='flex w-full p-4 items-center justify-between gap-4 z-50 border-t mt-4 fixed bottom-0 right-0 bg-white'>
             <p className='text-lg font-semibold text-gray-900 w-fit whitespace-nowrap'>
               รวม {calculateTotalOrderPrice().toFixed(2)} บาท
             </p>

@@ -52,6 +52,7 @@ const CartList = ({ tableId, qrCode }: CartListProps) => {
                 <ProductItem
                   name={item.product.name}
                   quantity={item.quantity}
+                  imageUrl={item.product.image}
                   isEdit
                 />
               </ProductItemDrawer>

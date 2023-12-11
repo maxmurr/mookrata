@@ -51,6 +51,34 @@ export const createOrder = async (
     })
   }
 
+  if (productCart) {
+    const createdProductCartItems = productCart.map(productCartItem => {
+      if (productCartItem.quantity > 0) {
+        return {
+          quantity: productCartItem.quantity,
+          product: {
+            connect: {
+              id: productCartItem.product.id,
+            },
+          },
+        }
+      }
+    })
+
+    await db.productCart.create({
+      data: {
+        productCartItems: {
+          create: createdProductCartItems as any,
+        },
+        order: {
+          connect: {
+            id: createdOrder.id,
+          },
+        },
+      },
+    })
+  }
+
   // if (promotionCart) {
   //   const createdPromotionCartItems = promotionCart.map(promotionCartItem => {
   //     if (promotionCartItem.quantity > 0) {
@@ -79,33 +107,33 @@ export const createOrder = async (
   //   await Promise.all(createdPromotionCartItems)
   // }
 
-  if (productCart) {
-    const createdProductCartItems = productCart.map(productCartItem => {
-      if (productCartItem.quantity > 0) {
-        return db.productCart.create({
-          data: {
-            productCartItems: {
-              create: {
-                quantity: productCartItem.quantity,
-                product: {
-                  connect: {
-                    id: productCartItem.product.id,
-                  },
-                },
-              },
-            },
-            order: {
-              connect: {
-                id: createdOrder.id,
-              },
-            },
-          },
-        })
-      }
-    })
+  // if (productCart) {
+  //   const createdProductCartItems = productCart.map(productCartItem => {
+  //     if (productCartItem.quantity > 0) {
+  //       return db.productCart.create({
+  //         data: {
+  //           productCartItems: {
+  //             create: {
+  //               quantity: productCartItem.quantity,
+  //               product: {
+  //                 connect: {
+  //                   id: productCartItem.product.id,
+  //                 },
+  //               },
+  //             },
+  //           },
+  //           order: {
+  //             connect: {
+  //               id: createdOrder.id,
+  //             },
+  //           },
+  //         },
+  //       })
+  //     }
+  //   })
 
-    await Promise.all(createdProductCartItems)
-  }
+  //   await Promise.all(createdProductCartItems)
+  // }
 
   revalidatePath('/dashboard/table')
   return createdOrder

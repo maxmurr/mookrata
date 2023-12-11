@@ -34,20 +34,36 @@ export const updateProduct = async (
   categoryId: number,
   image?: string | undefined
 ) => {
-  const product = await db.product.update({
-    where: {
-      id: productId,
-    },
-    data: {
-      name,
-      price,
-      description,
-      image,
-    },
-  })
+  if (image) {
+    const product = await db.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        name,
+        price,
+        description,
+        image,
+      },
+    })
 
-  revalidatePath(`/dashboard/menu/category/${categoryId}`)
-  return product
+    revalidatePath(`/dashboard/menu/category/${categoryId}`)
+    return product
+  } else {
+    const product = await db.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        name,
+        price,
+        description,
+      },
+    })
+
+    revalidatePath(`/dashboard/menu/category/${categoryId}`)
+    return product
+  }
 }
 
 export const deleteProduct = async (productId: number, categoryId: number) => {
