@@ -59,15 +59,12 @@ const BillingPage = async ({ params }: BillingPageProps) => {
         </Link>
       </div>
       <section className='flex p-4 flex-col justify-center items-center gap-4 flex-1 h-full'>
-        <AspectRatio ratio={16 / 9}>
-          <Image
-            src='/images/prompt_pay.png'
-            width={160}
-            height={53}
-            alt='prompt-pay'
-            
-          />
-        </AspectRatio>
+        <Image
+          src='/images/prompt_pay.png'
+          width={160}
+          height={53}
+          alt='prompt-pay'
+        />
         <Image
           src={`https://promptpay.io/0646504306/${calculateTotalOrderPrice().toFixed(
             2

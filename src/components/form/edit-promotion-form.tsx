@@ -21,6 +21,7 @@ import { updatePromotion } from '../../lib/actions/promotion'
 import { useRouter } from 'next/navigation'
 import { Promotion } from '@prisma/client'
 import { useEdgeStore } from '@/lib/edgestore'
+import DeletePromotionDrawer from '../drawer/delete-promotion-drawer'
 
 const editPromotionSchema = z.object({
   name: z.string().nonempty('กรุณากรอกชื่อโปรโมชั่น'),
@@ -165,7 +166,7 @@ const EditPromotionForm = ({ promotion }: EditPromotionFormProps) => {
               htmlFor='fileUpload'
               className='flex flex-col items-center gap-1 self-stretch rounded-[.75rem] border bg-white px-6 py-4'
             >
-              <div className='flex flex-col items-center gap-[.75rem] self-stretch'>
+              <div className='flex flex-col items-center gap-[.5rem] self-stretch'>
                 <div className='shadow-xs flex h-[2.5rem] w-[2.5rem] items-center justify-center rounded-[.5rem] border bg-white p-[.625rem]'>
                   <Icons.upload />
                 </div>
@@ -190,15 +191,17 @@ const EditPromotionForm = ({ promotion }: EditPromotionFormProps) => {
             </label>
           </FormControl>
         </FormItem>
-        <div className='flex w-full p-4 bg-background items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
-          <Button
-            className='w-full text-red-700'
-            variant={'outline'}
-            type='button'
-            disabled={isLoading}
-          >
-            นำออก
-          </Button>
+        <div className='flex w-full p-4 bg-background z-50 items-center justify-between gap-4 border-t mt-4 fixed bg-white bottom-0 right-0'>
+          <DeletePromotionDrawer promotion={promotion}>
+            <Button
+              className='w-full text-red-700'
+              variant={'outline'}
+              type='button'
+              disabled={isLoading}
+            >
+              ลบ
+            </Button>
+          </DeletePromotionDrawer>
           <Button className='w-full' type='submit' disabled={isLoading}>
             บันทึก
           </Button>

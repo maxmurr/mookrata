@@ -31,7 +31,7 @@ const EditPromotionPage = async ({ params }: EditPromotionPageProps) => {
   }
 
   return (
-    <main>
+    <main className='h-screen'>
       <div className='flex h-16 p-2 items-center justify-between gap-2 shrink-0 border-b w-full'>
         <Link href={`/dashboard/promotion`} legacyBehavior>
           <div className='flex items-center'>
@@ -44,10 +44,10 @@ const EditPromotionPage = async ({ params }: EditPromotionPageProps) => {
           </div>
         </Link>
       </div>
-      <section className='flex p-4 flex-col justify-center items-start gap-4 flex-1 h-full'>
+      <section className='flex p-4 flex-col justify-start items-center gap-4 flex-1'>
         <EditPromotionForm promotion={promotion as unknown as Promotion} />
       </section>
-      <div className='flex items-start justify-between w-full px-4 py-2'>
+      <div className='flex items-start justify-between w-full px-4'>
         <p className='text-lg font-semibold'>รายการอาหาร</p>
         <Link
           href={`/dashboard/promotion/${promotion.id}/category`}
@@ -63,9 +63,9 @@ const EditPromotionPage = async ({ params }: EditPromotionPageProps) => {
         </Link>
       </div>
       {!!promotion.productCart?.productCartItems.length ? (
-        <section className='flex p-4 flex-col justify-center items-start gap-4 flex-1 h-full'>
+        <section className='flex p-4 flex-col justify-start items-start gap-4 flex-1 h-full'>
           <div className='w-full gap-4'>
-            <ScrollArea className='flex flex-col gap-4 max-h-16'>
+            <ScrollArea className='flex flex-col gap-4 max-h-96'>
               {promotion.productCart.productCartItems.map(item => (
                 <ProductItemDrawer
                   key={item.id}

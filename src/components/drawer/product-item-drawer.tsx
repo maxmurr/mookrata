@@ -63,8 +63,8 @@ const ProductItemDrawer = ({
       <DrawerTrigger className='w-full'>{children}</DrawerTrigger>
       <DrawerContent className='w-full'>
         <div className='h-full flex flex-col justify-between pt-4'>
-          <div className='flex py-0 px-4 flex-col items-start gap-4 h-96 justify-between'>
-            <AspectRatio ratio={16 / 9} className='w-full h-72'>
+          <div className='flex py-0 px-4 flex-col items-start gap-4 justify-between'>
+            <AspectRatio ratio={16 / 9} className='w-full'>
               <Image
                 src={product.image ? product.image : '/images/pork.png'}
                 alt='product image'
@@ -83,7 +83,7 @@ const ProductItemDrawer = ({
             </div>
             <p className='text-base text-gray-700'>{product.description}</p>
           </div>
-          <div className='flex p-4 items-center gap-4 border-t w-full mt-4'>
+          <div className='flex p-4 items-center gap-4 border-t w-full fixed bottom-0 bg-white mt-4'>
             <div className='flex items-center gap-4 '>
               <Button
                 variant={'outline'}

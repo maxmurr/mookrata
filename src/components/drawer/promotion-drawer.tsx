@@ -23,10 +23,10 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
   return (
     <Drawer>
       <DrawerTrigger className='w-full'>{children}</DrawerTrigger>
-      <DrawerContent>
-        <div className='h-full flex flex-col justify-between pt-4 w-full'>
+      <DrawerContent className='h-screen'>
+        <div className='flex flex-col justify-between pt-4 w-full h-full'>
           <div className='flex py-0 px-4 flex-col items-start gap-4 h- justify-between'>
-            <AspectRatio ratio={16 / 9} className='w-full h-72'>
+            <AspectRatio ratio={16 / 9} className='w-full'>
               <Image
                 src={
                   promotion.image ? promotion.image : '/images/promotion.jpeg'
@@ -37,7 +37,7 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
                 className='rounded-lg '
               />
             </AspectRatio>
-            <div className='flex items-center gap-4 pb-4 justify-between w-full border-b'>
+            <div className='flex items-center gap-4 pb-2 justify-between w-full border-b'>
               <p className='text-2xl font-semibold text-gray-900'>
                 {promotion.name}
               </p>
@@ -50,7 +50,7 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
               <p className='text-lg font-semibold text-gray-900 '>
                 รายการอาหารในชุด
               </p>
-              <ScrollArea className='w-full max-h-80 overflow-y-auto'>
+              <ScrollArea className='w-full max-h-96 overflow-y-auto'>
                 <div className='flex flex-col items-start gap-4 w-full'>
                   {promotion.productCart?.productCartItems.map(
                     (item: {
@@ -70,7 +70,7 @@ const PromotionDrawer = ({ children, promotion }: PromotionDrawerProps) => {
               </ScrollArea>
             </div>
           </div>
-          <div className='flex p-4 items-center gap-4 border-t w-full mt-4'>
+          <div className='flex p-4 items-center gap-4 border-t w-full fixed bottom-0 bg-white mt-4'>
             <div className='flex items-center gap-4 '>
               <Button
                 variant={'outline'}

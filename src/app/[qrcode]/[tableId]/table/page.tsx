@@ -92,7 +92,7 @@ const TablePage = async ({ params }: TablePageProps) => {
           </div>
         </section>
       )}
-      <section className='container mx-auto p-4 flex-col items-start space-y-4 flex-1'>
+      <section className='container mx-auto h-screen p-4 pt-0 flex-col items-start space-y-4 flex-1'>
         <div className='flex justify-between items-center'>
           <p className='text-lg font-semibold text-gray-900'>หมวดหมู่</p>
         </div>

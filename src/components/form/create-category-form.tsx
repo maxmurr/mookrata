@@ -108,7 +108,7 @@ const CreateCategoryForm = () => {
               htmlFor='fileUpload'
               className='flex flex-col items-center gap-1 self-stretch rounded-[.75rem] border bg-white px-6 py-4'
             >
-              <div className='flex flex-col items-center gap-[.75rem] self-stretch'>
+              <div className='flex flex-col items-center gap-[.5rem] self-stretch'>
                 <div className='shadow-xs flex h-[2.5rem] w-[2.5rem] items-center justify-center rounded-[.5rem] border bg-white p-[.625rem]'>
                   <Icons.upload />
                 </div>

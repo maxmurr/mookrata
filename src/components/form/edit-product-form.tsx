@@ -179,7 +179,7 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
               htmlFor='uploadFile'
               className='flex flex-col items-center gap-1 self-stretch rounded-[.75rem] border bg-white px-6 py-4'
             >
-              <div className='flex flex-col items-center gap-[.75rem] self-stretch'>
+              <div className='flex flex-col items-center gap-[.5rem] self-stretch'>
                 <div className='shadow-xs flex h-[2.5rem] w-[2.5rem] items-center justify-center rounded-[.5rem] border bg-white p-[.625rem]'>
                   <Icons.upload />
                 </div>
@@ -205,7 +205,7 @@ const EditProductForm = ({ product, categoryId }: EditProductFormProps) => {
             </label>
           </FormControl>
         </FormItem>
-        <div className='flex w-full p-4 bg-background items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
+        <div className='flex w-full p-4 bg-background items-center justify-between gap-4 border-t mt-4 fixed bg-white z-50 bottom-0 right-0'>
           <DeleteProductDrawer product={product} categoryId={categoryId}>
             <Button
               className='w-full text-red-700'

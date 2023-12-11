@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { getServerAuthSession } from '../../server/auth'
 import { db } from '../../server/db'
 import { ProductCart } from '../atoms'
 
@@ -22,6 +21,17 @@ export const getPromotions = async () => {
 
   revalidatePath('/dashboard/promotion')
   return promotions
+}
+
+export const deletePromotion = async (id: number) => {
+  const promotion = await db.promotion.delete({
+    where: {
+      id,
+    },
+  })
+
+  revalidatePath(`/dashboard/promotion`)
+  return promotion
 }
 
 export const getPromotionById = async (id: number) => {

@@ -1,22 +1,24 @@
+'use client'
+
 import React from 'react'
 import { Drawer, DrawerContent, DrawerTrigger } from '../ui/drawer'
-import { Product } from '@prisma/client'
+import { Promotion } from '@prisma/client'
 import { Icons } from '../icons'
 import { Button } from '../ui/button'
-import { deleteProduct } from '../../lib/actions/product'
 import toast from 'react-hot-toast'
+import { deletePromotion } from '../../lib/actions/promotion'
+import { useRouter } from 'next/navigation'
 
-type DeleteProductDrawerProps = {
+type DeletePromotionDrawerProps = {
   children: React.ReactNode
-  product: Product
-  categoryId: number
+  promotion: Promotion
 }
 
-const DeleteProductDrawer = ({
+const DeletePromotionDrawer = ({
   children,
-  product,
-  categoryId,
-}: DeleteProductDrawerProps) => {
+  promotion,
+}: DeletePromotionDrawerProps) => {
+  const router = useRouter()
   return (
     <Drawer>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
@@ -27,7 +29,7 @@ const DeleteProductDrawer = ({
               <Icons.trash className='w-6 h-6 text-red-500' />
             </div>
             <p className='text-lg font-semibold text-gray-900'>
-              ลบ {product.name}
+              ลบ {promotion.name}
             </p>
           </div>
           <div className='flexe py-4 flex-col items-start w-full'>
@@ -36,16 +38,19 @@ const DeleteProductDrawer = ({
                 variant={'destructive'}
                 className='w-full'
                 onClick={async () => {
-                  await deleteProduct(product.id, categoryId)
+                  await deletePromotion(promotion.id)
                     .then(() => {
-                      toast.success('ลบรายการเรียบร้อยแล้ว')
+                      toast.success('ลบโปรโมชันเรียบร้อยแล้ว')
                       const escEvent = new KeyboardEvent('keydown', {
                         key: 'Escape',
                       })
                       document.dispatchEvent(escEvent)
+                      router.push('/dashboard/promotion')
+                      router.refresh()
                     })
-                    .catch(() => {
-                      toast.error('ลบรายการไม่สำเร็จ')
+                    .catch(e => {
+                      toast.error('ลบโปรโมชันไม่สำเร็จ')
+                      console.log('Error', e)
                     })
                 }}
               >
@@ -71,4 +76,4 @@ const DeleteProductDrawer = ({
   )
 }
 
-export default DeleteProductDrawer
+export default DeletePromotionDrawer

@@ -117,7 +117,7 @@ const EditCategoryForm = ({ category }: EditCategoryFormProps) => {
               htmlFor='fileUpload'
               className='flex flex-col items-center gap-1 self-stretch rounded-[.75rem] border bg-white px-6 py-4'
             >
-              <div className='flex flex-col items-center gap-[.75rem] self-stretch'>
+              <div className='flex flex-col items-center gap-[.5rem] self-stretch'>
                 <div className='shadow-xs flex h-[2.5rem] w-[2.5rem] items-center justify-center rounded-[.5rem] border bg-white p-[.625rem]'>
                   <Icons.upload />
                 </div>
@@ -142,7 +142,7 @@ const EditCategoryForm = ({ category }: EditCategoryFormProps) => {
             </label>
           </FormControl>
         </FormItem>
-        <div className='flex w-full bg-background p-4 items-center justify-between gap-4 border-t mt-4 fixed bottom-0 right-0'>
+        <div className='flex w-full bg-background p-4 items-center justify-between gap-4 border-t bg-white z-50 mt-4 fixed bottom-0 right-0'>
           <DeleteCategoryDrawer category={category}>
             <Button
               className='w-full text-red-700'

@@ -27,7 +27,9 @@ const ProductItem = ({
           {quantity}
         </div>
         <div className='flex flex-col items-start gap-2'>
-          <p className='text-base text-gray-900 whitespace-nowrap'>{name}</p>
+          <p className='text-base text-gray-900 whitespace-nowrap text-start'>
+            {name}
+          </p>
           {isEdit && <p className='text-brand text-sm font-semibold'>แก้ไข</p>}
           {status && (
             <p
