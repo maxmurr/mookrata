@@ -26,30 +26,58 @@ export const createOrder = async (
   if (promotionCart) {
     const createdPromotionCartItems = promotionCart.map(promotionCartItem => {
       if (promotionCartItem.quantity > 0) {
-        return db.promotionCart.create({
-          data: {
-            promotionCartItems: {
-              create: {
-                quantity: promotionCartItem.quantity,
-                promotion: {
-                  connect: {
-                    id: promotionCartItem.promotion.id,
-                  },
-                },
-              },
-            },
-            order: {
-              connect: {
-                id: createdOrder.id,
-              },
+        return {
+          quantity: promotionCartItem.quantity,
+          promotion: {
+            connect: {
+              id: promotionCartItem.promotion.id,
             },
           },
-        })
+        }
       }
     })
 
-    await Promise.all(createdPromotionCartItems)
+    await db.promotionCart.create({
+      data: {
+        promotionCartItems: {
+          create: createdPromotionCartItems as any,
+        },
+        order: {
+          connect: {
+            id: createdOrder.id,
+          },
+        },
+      },
+    })
   }
+
+  // if (promotionCart) {
+  //   const createdPromotionCartItems = promotionCart.map(promotionCartItem => {
+  //     if (promotionCartItem.quantity > 0) {
+  //       return db.promotionCart.create({
+  //         data: {
+  //           promotionCartItems: {
+  //             create: {
+  //               quantity: promotionCartItem.quantity,
+  //               promotion: {
+  //                 connect: {
+  //                   id: promotionCartItem.promotion.id,
+  //                 },
+  //               },
+  //             },
+  //           },
+  //           order: {
+  //             connect: {
+  //               id: createdOrder.id,
+  //             },
+  //           },
+  //         },
+  //       })
+  //     }
+  //   })
+
+  //   await Promise.all(createdPromotionCartItems)
+  // }
 
   if (productCart) {
     const createdProductCartItems = productCart.map(productCartItem => {
